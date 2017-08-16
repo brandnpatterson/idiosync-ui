@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { array, func, string } from 'prop-types'
+import MdSearch from 'react-icons/lib/md/search'
 import styled from 'styled-components'
 
 const Search = ({ articles, placeholder, updateSearch }) => {
@@ -31,6 +32,7 @@ const Search = ({ articles, placeholder, updateSearch }) => {
           </Link>
         ))}
       </ul>
+      <MdSearch />
     </SearchForm>
   )
 }
