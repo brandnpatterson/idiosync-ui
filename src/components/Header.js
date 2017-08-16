@@ -1,33 +1,58 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { array, string } from 'prop-types'
+import { array } from 'prop-types'
 import styled from 'styled-components'
 
-const Header = ({ articles, search }) => (
-  <Nav>
-    <ul className="left">
-      <li><Link to="/">Idiosync</Link></li>
-      <li><Link to="/articles">Articles</Link></li>
-      <li><Link to="/add">Add</Link></li>
-    </ul>
-    <ul className="center">
-      <li>
-        <label htmlFor="serach"> Search
-        <input id="search" type="text" />
-        </label>
-    </li>
-    </ul>
-    <ul className="right">
-      <li><Link to="/about">About</Link></li>
-      <li><Link to="/register">Sign Up</Link></li>
-      <li><Link to="/login">Log In</Link></li>
-    </ul>
-  </Nav>
-)
+class Header extends Component {
+  constructor () {
+    super()
+    this.updateSearch = this.updateSearch.bind(this)
+    this.state = {
+      search: ''
+    }
+  }
+
+  updateSearch (e) {
+    this.setState({
+      search: e.target.value.substr(0, 20)
+    })
+  }
+
+  render () {
+    console.log(this.props.articles)
+
+    const { search } = this.state
+
+    return (
+      <Nav>
+        <ul className="left">
+          <li><Link to="/">Idiosync</Link></li>
+          <li><Link to="/articles">Articles</Link></li>
+          <li><Link to="/add">Add</Link></li>
+        </ul>
+        <ul className="search">
+          <li>
+            <label className="search-title" htmlFor="search">Search</label>
+            <input
+              id="search"
+              type="text"
+              value={search}
+              onChange={this.updateSearch}
+            />
+        </li>
+        </ul>
+        <ul className="right">
+          <li><Link to="/about">About</Link></li>
+          <li><Link to="/register">Sign Up</Link></li>
+          <li><Link to="/login">Log In</Link></li>
+        </ul>
+      </Nav>
+    )
+  }
+}
 
 Header.propTypes = {
-  articles: array.isRequired,
-  search: string.isRequired
+  articles: array.isRequired
 }
 
 const Nav = styled.nav `
@@ -43,6 +68,9 @@ const Nav = styled.nav `
   .right {
     justify-content: space-around;
     max-width: 15em;
+  }
+  .search-title {
+    margin-right: 0.5em;
   }
   ul {
     display: flex;

@@ -17,8 +17,7 @@ class App extends Component {
   constructor () {
     super()
     this.state = {
-      articles: [],
-      search: 'Level Up'
+      articles: []
     }
   }
 
@@ -38,7 +37,7 @@ class App extends Component {
 
     return (
       <Wrapper>
-        <Header articles={articles} search={search} />
+        <Header articles={articles} />
         <Switch>
           <Route exact path="/" render={() => (
             <Link to="/articles">
