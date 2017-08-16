@@ -42,38 +42,22 @@ const Contents = styled.div `
     }
   }
 `
-const TableOfContents = ({ lorem, prose }) => {
+const TableOfContents = ({ articles }) => {
   return (
     <Contents>
       <div className="outer">
         <h2 className="title">Idiosync</h2>
         <div className="inner">
-          <h2>Prose</h2>
+          <h2>Articles</h2>
           <hr />
           {
-            prose.map(item => (
+            articles.map(item => (
               <ul key={item.id}>
                 <li className="author">
                   {item.username}
                 </li>
                 <li className="title">
-                  <Link to={`/posts/${item.id}`}>{item.title}</Link>
-                </li>
-              </ul>
-            ))
-          }
-        </div>
-        <div className="inner">
-          <h2>Lorem</h2>
-          <hr />
-          {
-            lorem.map(item => (
-              <ul key={item.id}>
-                <li className="author">
-                  {item.username}
-                </li>
-                <li className="title">
-                  <Link to={`/posts/${item.id}`}>{item.title}</Link>
+                  <Link to={`/articles/${item.id}`}>{item.title}</Link>
                 </li>
               </ul>
             ))

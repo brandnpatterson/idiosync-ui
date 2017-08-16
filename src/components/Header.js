@@ -29,7 +29,7 @@ const Header = () => (
   <Nav>
     <ul className="left">
       <li><Link to="/">Idiosync</Link></li>
-      <li><Link to="/posts">Posts</Link></li>
+      <li><Link to="/articles">Articles</Link></li>
       <li><Link to="/about">About</Link></li>
     </ul>
     <ul className="right">

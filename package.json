@@ -9,6 +9,7 @@
     "start": "react-scripts start"
   },
   "dependencies": {
+    "axios": "^0.16.2",
     "normalize.css": "^7.0.0",
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
@@ -21,6 +22,5 @@
   },
   "eslintConfig": {
     "extends": "./node_modules/react-scripts/config/eslint.js"
-  },
-  "proxy": "http://localhost:5000"
+  }
 }

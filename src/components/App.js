@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
+import axios from 'axios'
 import { Link, Switch, Route } from 'react-router-dom'
 import Header from './Header'
 import About from './About'
 import Login from './Login'
-import Post from './Post'
+import Article from './Article'
 import NotFound from './NotFound'
 import Register from './Register'
 import TableOfContents from './TableOfContents'
@@ -26,30 +27,30 @@ class App extends Component {
   constructor () {
     super()
     this.state = {
-      lorem: [],
-      prose: []
+      articles: []
     }
   }
 
   componentDidMount () {
-    fetch('lorem')
-      .then(res => res.json())
-      .then(lorem => this.setState({ lorem }))
-    fetch('prose')
-      .then(res => res.json())
-      .then(prose => this.setState({ prose }))
+    const url = 'http://localhost:3000/api/v1/articles'
+    axios.get(url)
+      .then((res) => {
+        let articles = res.data
+        this.setState({ articles })
+      })
+      .catch(function (error) {
+        console.log('an error has occured')
+      })
   }
 
   render () {
-    const { lorem } = this.state
-    const { prose } = this.state
-    const posts = lorem.concat(prose)
+    const { articles } = this.state
     return (
       <Wrapper>
         <Header />
         <Switch>
           <Route exact path="/" render={() => (
-            <Link to="/posts">
+            <Link to="/articles">
               <Background src={image} alt="idiosync" />
             </Link>
           )}/>
@@ -57,15 +58,15 @@ class App extends Component {
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
           <Switch>
-            {lorem && prose && (
-              <Route exact path="/posts" render={() => {
+            {articles && (
+              <Route exact path="/articles" render={() => {
                 return (
-                  <TableOfContents lorem={lorem} prose={prose} />
+                  <TableOfContents articles={articles} />
                 )
               }} />
             )}
-            <Route path="/posts/:index" render={({ match }) => {
-              return <Post post={posts.find(p => p.id === parseInt(match.params.index, 10))} />
+            <Route path="/articles/:index" render={({ match }) => {
+              return <Article articles={articles} article={articles.find(p => p.id === parseInt(match.params.index, 10))} />
             }} />
           </Switch>
           <Route component={NotFound} />
