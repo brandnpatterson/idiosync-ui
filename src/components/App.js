@@ -16,8 +16,11 @@ const image = 'images/landing.jpg'
 class App extends Component {
   constructor () {
     super()
+    this.clearSearch = this.clearSearch.bind(this)
+    this.updateSearch = this.updateSearch.bind(this)
     this.state = {
-      articles: []
+      articles: [],
+      search: 'Search'
     }
   }
 
@@ -31,13 +34,25 @@ class App extends Component {
       .catch(err => console.log(err))
   }
 
+  updateSearch (e) {
+    this.setState({
+      search: e.target.value.substr(0, 20)
+    })
+  }
+
+  clearSearch () {
+    this.setState({
+      search: 'Search'
+    })
+  }
+
   render () {
     const { articles } = this.state
     const { search } = this.state
 
     return (
-      <Wrapper>
-        <Header articles={articles} />
+      <Wrapper onClick={this.clearSearch}>
+        <Header articles={articles} search={search} updateSearch={this.updateSearch} />
         <Switch>
           <Route exact path="/" render={() => (
             <Link to="/articles">

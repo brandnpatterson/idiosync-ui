@@ -1,67 +1,50 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import { array } from 'prop-types'
 import styled from 'styled-components'
 
-class Header extends Component {
-  constructor () {
-    super()
-    this.updateSearch = this.updateSearch.bind(this)
-    this.state = {
-      search: 'Search'
-    }
-  }
-
-  updateSearch (e) {
-    this.setState({
-      search: e.target.value.substr(0, 20)
-    })
-  }
-
-  render () {
-    const { search } = this.state
-
-    let filteredArticles = this.props.articles.filter(
-      article => (
-        article.title.indexOf(search) !== -1
-      )
+const Header = ({ articles, search, updateSearch }) => {
+  let filteredArticles = articles.filter(
+    article => (
+      article.title.indexOf(search) !== -1
     )
-
-    return (
-      <Nav>
-        <ul className="left">
-          <li><Link to="/">Idiosync</Link></li>
-          <li><Link to="/articles">Articles</Link></li>
-          <li><Link to="/add">Add</Link></li>
+  )
+  return (
+    <Nav>
+      <ul className="left">
+        <li><Link to="/">Idiosync</Link></li>
+        <li><Link to="/articles">Articles</Link></li>
+        <li><Link to="/add">Add</Link></li>
+      </ul>
+      <div className="search">
+        <input
+          id="search"
+          className="search__input"
+          type="text"
+          value={search}
+          onChange={updateSearch}
+        />
+      </div>
+      <ul className="right">
+        <li><Link to="/about">About</Link></li>
+        <li><Link to="/register">Sign Up</Link></li>
+        <li><Link to="/login">Log In</Link></li>
+      </ul>
+      <div>
+        <ul className="search__result">
+          {filteredArticles.map(article => (
+            <Link
+              className="search__result--item"
+              key={article.id}
+              to={`/articles/${article.id}`}
+              >
+              <li>{ search === '' ? null : article.title }</li>
+            </Link>
+          ))}
         </ul>
-        <div className="search">
-          <ul>
-            {filteredArticles.map(article => (
-              <li className="search__results" key={article.id}>
-                {
-                  search === ''
-                  ? null
-                  : article.title
-                }
-              </li>
-            ))}
-          </ul>
-          <input
-            id="search"
-            className="search__input"
-            type="text"
-            value={search}
-            onChange={this.updateSearch}
-          />
-        </div>
-        <ul className="right">
-          <li><Link to="/about">About</Link></li>
-          <li><Link to="/register">Sign Up</Link></li>
-          <li><Link to="/login">Log In</Link></li>
-        </ul>
-      </Nav>
-    )
-  }
+      </div>
+    </Nav>
+  )
 }
 
 Header.propTypes = {
@@ -74,6 +57,9 @@ const Nav = styled.nav `
   justify-content: space-between;
   padding: 1em 0;
   margin: 0 auto;
+  a {
+    text-decoration: none;
+  }
   .left {
     justify-content: space-around;
     max-width: 20em;
@@ -87,21 +73,19 @@ const Nav = styled.nav `
     align-items: center;
     position: relative;
     width: 100%;
-    &__results {
-      display: block;
-      flex-direction: column;
-      width: 200px;
-      background: white;
-      position: relative;
-      top: 3em;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      z-index: 5;
-      left: 0;
-    }
     &__result {
-      padding: 10px;
-      display: block;
-      border-bottom: 1px solid #ececec;
+      position: absolute;
+      top: 3em;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      &--item {
+        background: white;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1), 0 5px 10px rgba(0, 0, 0, 0.05);
+        padding: 0.5em;
+        width: 90%;
+      }
       &--active {
         background: #f1f1f1;
       }
