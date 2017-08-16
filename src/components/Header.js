@@ -8,7 +8,7 @@ class Header extends Component {
     super()
     this.updateSearch = this.updateSearch.bind(this)
     this.state = {
-      search: ''
+      search: 'Search'
     }
   }
 
@@ -19,9 +19,13 @@ class Header extends Component {
   }
 
   render () {
-    console.log(this.props.articles)
-
     const { search } = this.state
+
+    let filteredArticles = this.props.articles.filter(
+      article => (
+        article.title.indexOf(search) !== -1
+      )
+    )
 
     return (
       <Nav>
@@ -30,17 +34,26 @@ class Header extends Component {
           <li><Link to="/articles">Articles</Link></li>
           <li><Link to="/add">Add</Link></li>
         </ul>
-        <ul className="search">
-          <li>
-            <label className="search-title" htmlFor="search">Search</label>
-            <input
-              id="search"
-              type="text"
-              value={search}
-              onChange={this.updateSearch}
-            />
-        </li>
-        </ul>
+        <div className="search">
+          <ul>
+            {filteredArticles.map(article => (
+              <li className="search__results" key={article.id}>
+                {
+                  search === ''
+                  ? null
+                  : article.title
+                }
+              </li>
+            ))}
+          </ul>
+          <input
+            id="search"
+            className="search__input"
+            type="text"
+            value={search}
+            onChange={this.updateSearch}
+          />
+        </div>
         <ul className="right">
           <li><Link to="/about">About</Link></li>
           <li><Link to="/register">Sign Up</Link></li>
@@ -69,8 +82,30 @@ const Nav = styled.nav `
     justify-content: space-around;
     max-width: 15em;
   }
-  .search-title {
-    margin-right: 0.5em;
+  .search {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    &__results {
+      display: block;
+      flex-direction: column;
+      width: 200px;
+      background: white;
+      position: relative;
+      top: 3em;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      z-index: 5;
+      left: 0;
+    }
+    &__result {
+      padding: 10px;
+      display: block;
+      border-bottom: 1px solid #ececec;
+      &--active {
+        background: #f1f1f1;
+      }
+    }
   }
   ul {
     display: flex;
