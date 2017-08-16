@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { array, object } from 'prop-types'
 import styled from 'styled-components'
 
 const Article = ({ article, articles }) => {
@@ -33,6 +34,12 @@ const Article = ({ article, articles }) => {
     </Wrapper>
   )
 }
+
+Article.propTypes = {
+  article: object.isRequired,
+  articles: array.isRequired
+}
+
 
 const Wrapper = styled.div`
   margin: 0 auto;

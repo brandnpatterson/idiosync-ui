@@ -1,11 +1,11 @@
 import React from 'react'
-import LoginForm from './themes/Form'
+import SignUpForm from './themes/Form'
 
-const Login = () => (
-  <LoginForm>
+const SignUp = () => (
+  <SignUpForm>
     <form action="">
       <div className="formgroup">
-        <h2>Log In</h2>
+        <h2>Sign Up</h2>
       </div>
       <div className="formgroup">
         <label htmlFor="email"> Email:
@@ -18,10 +18,10 @@ const Login = () => (
         </label>
       </div>
       <div className="formgroup">
-        <input className="post-data button" type="submit" name="submit" value="Log In" />
+        <input className="post-data button" type="submit" name="submit" value="SignUp" />
       </div>
     </form>
-  </LoginForm>
+  </SignUpForm>
 )
 
-export default Login
+export default SignUp

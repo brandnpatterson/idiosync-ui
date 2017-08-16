@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { Link, Switch, Route } from 'react-router-dom'
-import Header from './Header'
 import About from './About'
 import Add from './Add'
+import Home from './Home'
+import Header from './Header'
 import Login from './Login'
 import Article from './Article'
 import NotFound from './NotFound'
-import Register from './Register'
-import TableOfContents from './TableOfContents'
+import SignUp from './SignUp'
 import styled from 'styled-components'
 
 const image = 'images/landing.jpg'
@@ -17,7 +17,8 @@ class App extends Component {
   constructor () {
     super()
     this.state = {
-      articles: []
+      articles: [],
+      search: 'Level Up'
     }
   }
 
@@ -33,9 +34,11 @@ class App extends Component {
 
   render () {
     const { articles } = this.state
+    const { search } = this.state
+
     return (
       <Wrapper>
-        <Header />
+        <Header articles={articles} search={search} />
         <Switch>
           <Route exact path="/" render={() => (
             <Link to="/articles">
@@ -46,7 +49,7 @@ class App extends Component {
           {articles && (
             <Route exact path="/articles" render={() => {
               return (
-                <TableOfContents articles={articles} />
+                <Home articles={articles} />
               )
             }} />
           )}
@@ -56,7 +59,7 @@ class App extends Component {
           { /* Static Routes */ }
           <Route path="/about" component={About} />
           <Route path="/add" component={Add} />
-          <Route path="/register" component={Register} />
+          <Route path="/register" component={SignUp} />
           <Route path="/login" component={Login} />
           <Route component={NotFound} />
         </Switch>

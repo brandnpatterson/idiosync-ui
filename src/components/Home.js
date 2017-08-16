@@ -1,34 +1,39 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { array } from 'prop-types'
 import styled from 'styled-components'
 
-const TableOfContents = ({ articles }) => {
+const Home = ({ articles }) => {
   return (
-    <Contents>
+    <TableOfContents>
       <div className="outer">
         <h2 className="title">Idiosync</h2>
         <div className="inner">
           <h2>Articles</h2>
           <hr />
           {
-            articles.map(item => (
-              <ul key={item.id}>
+            articles.map(article => (
+              <ul key={article.id}>
                 <li className="author">
-                  {item.author}
+                  {article.author}
                 </li>
                 <li className="title">
-                  <Link to={`/articles/${item.id}`}>{item.title}</Link>
+                  <Link to={`/articles/${article.id}`}>{article.title}</Link>
                 </li>
               </ul>
             ))
           }
         </div>
       </div>
-    </Contents>
+    </TableOfContents>
   )
 }
 
-const Contents = styled.div `
+Home.propTypes = {
+  articles: array.isRequired
+}
+
+const TableOfContents = styled.div `
   background: whitesmoke;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1), 0 5px 10px rgba(0, 0, 0, 0.05);
   margin: 5em auto;
@@ -69,4 +74,4 @@ const Contents = styled.div `
   }
 `
 
-export default TableOfContents
+export default Home
