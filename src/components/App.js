@@ -16,11 +16,11 @@ const image = 'images/landing.jpg'
 class App extends Component {
   constructor () {
     super()
-    this.clearSearch = this.clearSearch.bind(this)
+    this.resetSearch = this.resetSearch.bind(this)
     this.updateSearch = this.updateSearch.bind(this)
     this.state = {
       articles: [],
-      search: 'Search'
+      placeholder: 'Search'
     }
   }
 
@@ -36,30 +36,30 @@ class App extends Component {
 
   updateSearch (e) {
     this.setState({
-      search: e.target.value.substr(0, 20)
+      placeholder: e.target.value.substr(0, 20)
     })
   }
 
-  clearSearch () {
+  resetSearch () {
     this.setState({
-      search: 'Search'
+      placeholder: 'Search'
     })
   }
 
   render () {
     const { articles } = this.state
-    const { search } = this.state
+    const { placeholder } = this.state
 
     return (
-      <Wrapper onClick={this.clearSearch}>
-        <Header articles={articles} search={search} updateSearch={this.updateSearch} />
+      <Div onClick={this.resetSearch}>
+        <Header articles={articles} placeholder={placeholder} updateSearch={this.updateSearch} />
         <Switch>
           <Route exact path="/" render={() => (
             <Link to="/articles">
               <Background src={image} alt="landing" />
             </Link>
           )}/>
-          { /* Articles -- Articles/:id */ }
+          { /* Articles */ }
           {articles && (
             <Route exact path="/articles" render={() => {
               return (
@@ -67,8 +67,12 @@ class App extends Component {
               )
             }} />
           )}
+          { /* Articles/:id */ }
           <Route path="/articles/:index" render={({ match }) => {
-            return <Article articles={articles} article={articles.find(p => p.id === parseInt(match.params.index, 10))} />
+            return <Article
+                    articles={articles}
+                    article={articles.find(p => p.id === parseInt(match.params.index, 10))}
+                  />
           }} />
           { /* Static Routes */ }
           <Route path="/about" component={About} />
@@ -77,7 +81,7 @@ class App extends Component {
           <Route path="/login" component={Login} />
           <Route component={NotFound} />
         </Switch>
-      </Wrapper>
+      </Div>
     )
   }
 }
@@ -85,7 +89,7 @@ class App extends Component {
 const Background = styled.img `
   width: 100%;
 `
-const Wrapper = styled.div `
+const Div = styled.div `
   font-family: sans-serif;
   li {
     list-style-type: none;

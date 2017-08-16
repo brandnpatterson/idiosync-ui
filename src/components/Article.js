@@ -7,7 +7,7 @@ const Article = ({ article, articles }) => {
   const total = articles.length
 
   return (
-    <Wrapper>
+    <Div>
       <header>
         <div>
           <h2>{article.title}</h2>
@@ -31,7 +31,7 @@ const Article = ({ article, articles }) => {
         </div>
       </header>
       <p>{article.content}</p>
-    </Wrapper>
+    </Div>
   )
 }
 
@@ -41,7 +41,7 @@ Article.propTypes = {
 }
 
 
-const Wrapper = styled.div`
+const Div = styled.div`
   margin: 0 auto;
   width: 70%;
   header {
