@@ -1,6 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
 
+const Login = () => (
+  <LoginForm>
+    <form action="">
+      <h2>Login</h2>
+      <input type="text" placeholder="email"/>
+      <input type="password" placeholder="password"/>
+      <button type="submit">Login</button>
+    </form>
+  </LoginForm>
+)
+
 const LoginForm = styled.div`
   form {
     display: flex;
@@ -16,15 +27,5 @@ const LoginForm = styled.div`
     }
   }
 `
-const Login = () => (
-  <LoginForm>
-    <form action="">
-      <h2>Login</h2>
-      <input type="text" placeholder="email"/>
-      <input type="password" placeholder="password"/>
-      <button type="submit">Login</button>
-    </form>
-  </LoginForm>
-)
 
 export default Login

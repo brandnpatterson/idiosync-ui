@@ -2,22 +2,11 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
-const SingleArticle = styled.div`
-  margin: 0 auto;
-  width: 70%;
-  header {
-    display: flex;
-    justify-content: space-between;
-  }
-  button {
-    margin: 1.5em 0 0 0.5em;
-  }
-`
 const Article = ({ article, articles }) => {
   const total = articles.length
-  
+
   return (
-    <SingleArticle>
+    <Wrapper>
       <header>
         <div>
           <h2>{article.title}</h2>
@@ -41,9 +30,20 @@ const Article = ({ article, articles }) => {
         </div>
       </header>
       <p>{article.content}</p>
-    </SingleArticle>
+    </Wrapper>
   )
 }
 
+const Wrapper = styled.div`
+  margin: 0 auto;
+  width: 70%;
+  header {
+    display: flex;
+    justify-content: space-between;
+  }
+  button {
+    margin: 1.5em 0 0 0.5em;
+  }
+`
 
 export default Article
