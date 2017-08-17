@@ -4,7 +4,7 @@ import { array, func, string } from 'prop-types'
 import styled from 'styled-components'
 import Search from './Search'
 
-const Header = ({ articles, placeholder, updateSearch }) => {
+const Header = ({ articles, search, updateSearch }) => {
   return (
     <Nav>
       <ul className="left">
@@ -12,7 +12,7 @@ const Header = ({ articles, placeholder, updateSearch }) => {
         <li><Link to="/articles">Articles</Link></li>
         <li><Link to="/add">Add</Link></li>
       </ul>
-      <Search className="search" articles={articles} placeholder={placeholder} updateSearch={updateSearch} />
+      <Search className="search" articles={articles} search={search} updateSearch={updateSearch} />
       <ul className="right">
         <li><Link to="/about">About</Link></li>
         <li><Link to="/register">Sign Up</Link></li>
@@ -24,7 +24,7 @@ const Header = ({ articles, placeholder, updateSearch }) => {
 
 Header.propTypes = {
   articles: array.isRequired,
-  placeholder: string.isRequired,
+  search: string.isRequired,
   updateSearch: func.isRequired
 }
 

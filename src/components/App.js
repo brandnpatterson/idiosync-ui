@@ -20,7 +20,7 @@ class App extends Component {
     this.updateSearch = this.updateSearch.bind(this)
     this.state = {
       articles: [],
-      placeholder: 'Search'
+      search: 'Search'
     }
   }
 
@@ -36,23 +36,23 @@ class App extends Component {
 
   updateSearch (e) {
     this.setState({
-      placeholder: e.target.value.substr(0, 20)
+      search: e.target.value.substr(0, 20)
     })
   }
 
   resetSearch () {
     this.setState({
-      placeholder: 'Search'
+      search: 'Search'
     })
   }
 
   render () {
     const { articles } = this.state
-    const { placeholder } = this.state
+    const { search } = this.state
 
     return (
       <Div onClick={this.resetSearch}>
-        <Header articles={articles} placeholder={placeholder} updateSearch={this.updateSearch} />
+        <Header articles={articles} search={search} updateSearch={this.updateSearch} />
         <Switch>
           <Route exact path="/" render={() => (
             <Link to="/articles">

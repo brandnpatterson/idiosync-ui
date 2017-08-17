@@ -4,22 +4,24 @@ import { array, func, string } from 'prop-types'
 import MdSearch from 'react-icons/lib/md/search'
 import styled from 'styled-components'
 
-const Search = ({ articles, placeholder, updateSearch }) => {
-  let filteredArticles = articles.filter(
-    article => {
-      return article.title.toLowerCase().indexOf(
-        placeholder.toLowerCase()) !== -1
+const Search = ({ articles, search, updateSearch }) => {
+  let filteredArticles = articles.filter(article => {
+    return article.title.toLowerCase().indexOf(
+      search.toLowerCase()) !== -1
     }
   )
+
+  // max search results === filteredArticles.length
+  filteredArticles.length = 20
 
   return (
     <SearchForm autoComplete="off">
       <input
         className="search__input"
         type="text"
-        placeholder={placeholder}
-        value=""
         onChange={updateSearch}
+        placeholder={search}
+        search={search}
       />
       <ul className="search__result">
         {filteredArticles.map(article => (
@@ -39,7 +41,7 @@ const Search = ({ articles, placeholder, updateSearch }) => {
 
 Search.propTypes = {
   articles: array.isRequired,
-  placeholder: string.isRequired,
+  search: string.isRequired,
   updateSearch: func.isRequired
 }
 
@@ -59,7 +61,6 @@ const SearchForm = styled.form `
       border: 1px solid #eee;
     }
     &__result {
-      background: white !important;
       position: absolute;
       top: 3em;
       left: 0;
