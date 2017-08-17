@@ -8,6 +8,7 @@ import Header from './Header'
 import Login from './Login'
 import Article from './Article'
 import NotFound from './NotFound'
+import SearchResults from './SearchResults'
 import SignUp from './SignUp'
 import styled from 'styled-components'
 
@@ -22,11 +23,12 @@ class App extends Component {
     super()
     this.state = {
       articles: [],
-      search: 'Search'
+      placeholder: 'Search',
+      search: ''
     }
   }
 
-  componentDidMount () {
+  componentWillMount () {
     const url = currentURL
     axios.get(url)
       .then(res => {
@@ -36,25 +38,41 @@ class App extends Component {
       .catch(err => console.log(err))
   }
 
-  updateSearch = (e) => {
+  resetSearch = () => {
     this.setState({
-      search: e.target.value.substr(0, 20)
+      search: ''
     })
   }
 
-  resetSearch = () => {
+  updateSearch = (e) => {
     this.setState({
-      search: 'Search'
+      search: e.target.value.substr(0, 20),
     })
   }
 
   render () {
     const { articles } = this.state
     const { search } = this.state
+    let filteredArticles = [];
+
+    if (search !== '') {
+      filteredArticles = articles.filter(article => {
+        return article.title.toLowerCase().indexOf(
+          search.toLowerCase()) !== -1
+        }
+      )
+    }
+
 
     return (
-      <Div onClick={this.resetSearch}>
-        <Header articles={articles} search={search} updateSearch={this.updateSearch} />
+      <Div>
+        <div onClick={this.resetSearch}>
+          <Header
+            articles={articles}
+            search={search}
+            updateSearch={this.updateSearch}
+          />
+        </div>
         <Switch>
           <Route exact path="/" render={() => (
             <Link to="/articles">
@@ -74,11 +92,13 @@ class App extends Component {
                     article={articles.find(p => p.id === parseInt(match.params.index, 10))}
                   />
           }} />
+          { /* Search Results */ }
+          <Route path="/search" render={() => {
+            return <SearchResults filteredArticles={filteredArticles} search={search} />
+          }} />
           { /* Static Routes */ }
           <Route path="/about" component={About} />
-          <Route path="/add" render={() => {
-            return <Add />
-          }} />
+          <Route path="/add" component={Add} />
           <Route path="/register" component={SignUp} />
           <Route path="/login" component={Login} />
           <Route component={NotFound} />

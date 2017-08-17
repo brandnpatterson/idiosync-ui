@@ -4,54 +4,56 @@ import { array, func, string } from 'prop-types'
 import MdSearch from 'react-icons/lib/md/search'
 import styled from 'styled-components'
 
-const Search = ({ articles, search, updateSearch }) => {
+const SearchBar = ({ articles, search, updateSearch }) => {
+
   let filteredArticles = articles.filter(article => {
     return article.title.toLowerCase().indexOf(
       search.toLowerCase()) !== -1
     }
   )
 
-  // max search results === filteredArticles.length
-  filteredArticles.length = 1
+  filteredArticles.length = 3
 
   return (
-    <SearchForm autoComplete="off">
-      <input
-        className="search__input"
+    <SearchInput autoComplete="off">
+      <input className="search__input"
         type="text"
         onChange={updateSearch}
-        placeholder={search}
+        placeholder="Search"
         value={search}
       />
       <ul className="search__result">
         {filteredArticles.map(article => (
           <Link
-            className="search__result--item"
+            className={"search__result--item" + (search === '' ? " hidden" : '')}
             key={article.id}
             to={`/articles/${article.id}`}
-            >
+          >
             <li>{ article.title }</li>
           </Link>
         ))}
       </ul>
-      <MdSearch className="search__icon" />
-    </SearchForm>
+      <Link to="/search"><MdSearch className="search__icon" /></Link>
+    </SearchInput>
   )
 }
 
-Search.propTypes = {
+SearchBar.propTypes = {
   articles: array.isRequired,
   search: string.isRequired,
   updateSearch: func.isRequired
 }
 
-const SearchForm = styled.form `
+const SearchInput = styled.div `
   display: flex;
   align-items: center;
   position: relative;
   width: 100%;
   @media (max-width: 700px) {
     margin-left: 3.2em;
+  }
+  .hidden {
+    display: none;
   }
   .search {
     &__input {
@@ -64,10 +66,11 @@ const SearchForm = styled.form `
     &__result {
       position: absolute;
       top: 3em;
-      left: 0;
+      left: -2em;
       display: flex;
       flex-direction: column;
       align-items: center;
+      z-index: 10;
       &--item {
         background: white !important;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1), 0 5px 10px rgba(0, 0, 0, 0.05);
@@ -85,4 +88,4 @@ const SearchForm = styled.form `
   }
 `
 
-export default Search
+export default SearchBar

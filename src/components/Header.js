@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { array, func, string } from 'prop-types'
 import styled from 'styled-components'
-import Search from './Search'
+import SearchBar from './SearchBar'
 
 const Header = ({ articles, search, updateSearch }) => {
   return (
@@ -12,7 +12,11 @@ const Header = ({ articles, search, updateSearch }) => {
         <li><Link to="/articles">Articles</Link></li>
         <li><Link to="/add">Add</Link></li>
       </ul>
-      <Search className="search" articles={articles} search={search} updateSearch={updateSearch} />
+      <SearchBar className="search"
+        articles={articles}
+        search={search}
+        updateSearch={updateSearch}
+      />
       <ul className="right">
         <li><Link to="/about">About</Link></li>
         <li><Link to="/register">Sign Up</Link></li>
@@ -25,7 +29,7 @@ const Header = ({ articles, search, updateSearch }) => {
 Header.propTypes = {
   articles: array.isRequired,
   search: string.isRequired,
-  updateSearch: func.isRequired
+  updateSearch: func.isRequired,
 }
 
 const Nav = styled.nav `
