@@ -13,11 +13,13 @@ import styled from 'styled-components'
 
 const image = 'images/landing.jpg'
 
+const devURL = 'http://localhost:3000/api/v1/articles'
+// const prodURL = ''
+const currentURL = devURL
+
 class App extends Component {
   constructor () {
     super()
-    this.resetSearch = this.resetSearch.bind(this)
-    this.updateSearch = this.updateSearch.bind(this)
     this.state = {
       articles: [],
       search: 'Search'
@@ -25,7 +27,7 @@ class App extends Component {
   }
 
   componentDidMount () {
-    const url = 'http://localhost:3000/api/v1/articles'
+    const url = currentURL
     axios.get(url)
       .then(res => {
         const articles = res.data
@@ -34,13 +36,13 @@ class App extends Component {
       .catch(err => console.log(err))
   }
 
-  updateSearch (e) {
+  updateSearch = (e) => {
     this.setState({
       search: e.target.value.substr(0, 20)
     })
   }
 
-  resetSearch () {
+  resetSearch = () => {
     this.setState({
       search: 'Search'
     })
@@ -58,13 +60,11 @@ class App extends Component {
             <Link to="/articles">
               <Background src={image} alt="landing" />
             </Link>
-          )}/>
+          )} />
           { /* Articles */ }
           {articles && (
             <Route exact path="/articles" render={() => {
-              return (
-                <Home articles={articles} />
-              )
+              return <Home articles={articles} />
             }} />
           )}
           { /* Articles/:id */ }
@@ -76,7 +76,9 @@ class App extends Component {
           }} />
           { /* Static Routes */ }
           <Route path="/about" component={About} />
-          <Route path="/add" component={Add} />
+          <Route path="/add" render={() => {
+            return <Add />
+          }} />
           <Route path="/register" component={SignUp} />
           <Route path="/login" component={Login} />
           <Route component={NotFound} />

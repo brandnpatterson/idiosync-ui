@@ -2,7 +2,8 @@ import styled from 'styled-components'
 
 const Form = styled.form`
   margin: 80px auto 0;
-  max-width: 75%;
+  width: 75%;
+  max-width: 30em;
   .formgroup {
     position: relative;
     display: block;

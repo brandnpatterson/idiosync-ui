@@ -12,7 +12,7 @@ const Search = ({ articles, search, updateSearch }) => {
   )
 
   // max search results === filteredArticles.length
-  filteredArticles.length = 20
+  filteredArticles.length = 1
 
   return (
     <SearchForm autoComplete="off">
@@ -21,7 +21,7 @@ const Search = ({ articles, search, updateSearch }) => {
         type="text"
         onChange={updateSearch}
         placeholder={search}
-        search={search}
+        value={search}
       />
       <ul className="search__result">
         {filteredArticles.map(article => (
@@ -34,7 +34,7 @@ const Search = ({ articles, search, updateSearch }) => {
           </Link>
         ))}
       </ul>
-      <MdSearch />
+      <MdSearch className="search__icon" />
     </SearchForm>
   )
 }
@@ -58,6 +58,7 @@ const SearchForm = styled.form `
       color: gray;
       font-size: 14px;
       height: 28px;
+      margin-right: 0.5em;
       border: 1px solid #eee;
     }
     &__result {
@@ -76,6 +77,10 @@ const SearchForm = styled.form `
       &--active {
         background: #f1f1f1;
       }
+    }
+    &__icon {
+      color: gray;
+      font-size: 22px;
     }
   }
 `
