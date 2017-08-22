@@ -4,30 +4,35 @@ import { array, func, string } from 'prop-types'
 import styled from 'styled-components'
 import SearchBar from './SearchBar'
 
-const Header = ({ articles, search, updateSearch }) => {
+const Header = ({ authenticated, filteredArticles, search, updateSearch }) => {
   return (
     <Nav>
       <ul className="left">
         <li><Link to="/">Idiosync</Link></li>
         <li><Link to="/articles">Articles</Link></li>
-        <li><Link to="/add">Add</Link></li>
-      </ul>
-      <SearchBar className="search"
-        articles={articles}
-        search={search}
-        updateSearch={updateSearch}
-      />
-      <ul className="right">
         <li><Link to="/about">About</Link></li>
-        <li><Link to="/register">Sign Up</Link></li>
-        <li><Link to="/login">Log In</Link></li>
       </ul>
+      <ul className="right">
+        <li><SearchBar
+              filteredArticles={filteredArticles}
+              search={search}
+              updateSearch={updateSearch}
+            />
+        </li>
+      </ul>
+      {
+        authenticated === true
+        ? <ul className="right">
+            <li><Link to="/add">Add</Link></li>
+          </ul>
+        : null
+      }
     </Nav>
   )
 }
 
 Header.propTypes = {
-  articles: array.isRequired,
+  filteredArticles: array.isRequired,
   search: string.isRequired,
   updateSearch: func.isRequired,
 }
@@ -35,18 +40,11 @@ Header.propTypes = {
 const Nav = styled.nav `
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1), 0 5px 10px rgba(0, 0, 0, 0.05);
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   padding: 1em 0;
   margin: 0 auto;
   a {
     text-decoration: none;
-  }
-  .left,
-  .right {
-    @media (max-width: 700px) {
-      background: white;
-      display: none;
-    }
   }
   .left {
     justify-content: space-around;

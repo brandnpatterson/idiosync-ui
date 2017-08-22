@@ -4,15 +4,7 @@ import { array, func, string } from 'prop-types'
 import MdSearch from 'react-icons/lib/md/search'
 import styled from 'styled-components'
 
-const SearchBar = ({ articles, search, updateSearch }) => {
-
-  let filteredArticles = articles.filter(article => {
-    return article.title.toLowerCase().indexOf(
-      search.toLowerCase()) !== -1
-    }
-  )
-
-  filteredArticles.length = 3
+const SearchBar = ({ search, filteredArticles, updateSearch }) => {
 
   return (
     <SearchInput autoComplete="off">
@@ -33,13 +25,13 @@ const SearchBar = ({ articles, search, updateSearch }) => {
           </Link>
         ))}
       </ul>
-      <Link to="/search"><MdSearch className="search__icon" /></Link>
+      <MdSearch className="search__icon" />
     </SearchInput>
   )
 }
 
 SearchBar.propTypes = {
-  articles: array.isRequired,
+  filteredArticles: array.isRequired,
   search: string.isRequired,
   updateSearch: func.isRequired
 }

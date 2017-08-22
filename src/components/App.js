@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import axios from 'axios'
 import { Link, Switch, Route } from 'react-router-dom'
+import axios from 'axios'
+
 import About from './About'
 import Add from './Add'
 import Home from './Home'
@@ -8,7 +9,7 @@ import Header from './Header'
 import Login from './Login'
 import Article from './Article'
 import NotFound from './NotFound'
-import SearchResults from './SearchResults'
+// import SearchResults from './SearchResults'
 import SignUp from './SignUp'
 import styled from 'styled-components'
 
@@ -23,12 +24,13 @@ class App extends Component {
     super()
     this.state = {
       articles: [],
-      placeholder: 'Search',
-      search: ''
+      search: '',
+      authenticated: true
     }
   }
 
-  componentWillMount () {
+  componentDidMount () {
+    // posts
     const url = currentURL
     axios.get(url)
       .then(res => {
@@ -51,8 +53,7 @@ class App extends Component {
   }
 
   render () {
-    const { articles } = this.state
-    const { search } = this.state
+    const { authenticated, articles, search } = this.state
     let filteredArticles = [];
 
     if (search !== '') {
@@ -63,12 +64,15 @@ class App extends Component {
       )
     }
 
+    filteredArticles.length = 3
 
     return (
       <Div>
         <div onClick={this.resetSearch}>
           <Header
             articles={articles}
+            authenticated={authenticated}
+            filteredArticles={filteredArticles}
             search={search}
             updateSearch={this.updateSearch}
           />
@@ -93,14 +97,16 @@ class App extends Component {
                   />
           }} />
           { /* Search Results */ }
-          <Route path="/search" render={() => {
+          {/* <Route path="/search" render={() => {
             return <SearchResults filteredArticles={filteredArticles} search={search} />
-          }} />
+          }} /> */}
           { /* Static Routes */ }
-          <Route path="/about" component={About} />
-          <Route path="/add" component={Add} />
-          <Route path="/register" component={SignUp} />
-          <Route path="/login" component={Login} />
+          <Route exact path="/about" component={About} />
+          <Route exact path="/add" render={() => {
+            return <Add authenticated={authenticated} />
+          }} />
+          <Route exact path="/register" component={SignUp} />
+          <Route exact path="/login" component={Login} />
           <Route component={NotFound} />
         </Switch>
       </Div>

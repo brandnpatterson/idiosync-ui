@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import AddForm from './themes/Form'
+import NotFound from './NotFound'
 
 const devURL = 'http://localhost:3000/api/v1/articles'
 // const prodURL = ''
@@ -41,29 +42,31 @@ class Add extends Component {
   render () {
     const { author, content, title } = this.state
     return (
-      <AddForm onSubmit={this.onSubmit} method="post" autoComplete="off">
-        <div className="formgroup">
-          <h2>Add Article</h2>
-        </div>
-        <div className="formgroup">
-          <label htmlFor="title"> Title:
-            <input value={title} onChange={this.onChange} name="title" type="text" id="title" autoFocus />
-          </label>
-        </div>
-        <div className="formgroup">
-          <label htmlFor="author"> Author:
-            <input value={author} onChange={this.onChange} name="author" type="text" id="author" />
-          </label>
-        </div>
-        <div className="formgroup">
-          <label htmlFor="content"> Content:
-            <textarea value={content} onChange={this.onChange} name="content" id="content" />
-          </label>
-        </div>
-        <div className="formgroup">
-          <input className="post-data button" name="submit" type="submit" value="Submit" />
-        </div>
-      </AddForm>
+      this.props.authenticated === true
+      ? <AddForm onSubmit={this.onSubmit} method="post" autoComplete="off">
+          <div className="formgroup">
+            <h2>Add Article</h2>
+          </div>
+          <div className="formgroup">
+            <label htmlFor="title"> Title:
+              <input value={title} onChange={this.onChange} name="title" type="text" id="title" autoFocus />
+            </label>
+          </div>
+          <div className="formgroup">
+            <label htmlFor="author"> Author:
+              <input value={author} onChange={this.onChange} name="author" type="text" id="author" />
+            </label>
+          </div>
+          <div className="formgroup">
+            <label htmlFor="content"> Content:
+              <textarea value={content} onChange={this.onChange} name="content" id="content" />
+            </label>
+          </div>
+          <div className="formgroup">
+            <input className="post-data button" name="submit" type="submit" value="Submit" />
+          </div>
+        </AddForm>
+      : <NotFound />
     )
   }
 }
