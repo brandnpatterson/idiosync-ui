@@ -11,6 +11,7 @@ const Header = ({ authenticated, filteredArticles, search, updateSearch }) => {
         <li><Link to="/">Idiosync</Link></li>
         <li><Link to="/articles">Articles</Link></li>
         <li><Link to="/about">About</Link></li>
+        <li><Link to="/login">Log In</Link></li>
       </ul>
       <ul className="right">
         <li><SearchBar

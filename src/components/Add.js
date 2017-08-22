@@ -3,9 +3,7 @@ import axios from 'axios'
 import AddForm from './themes/Form'
 import NotFound from './NotFound'
 
-const devURL = 'http://localhost:3000/api/v1/articles'
-// const prodURL = ''
-const currentURL = devURL
+const reqArticles = 'http://localhost:3000/api/v1/articles'
 
 class Add extends Component {
   constructor () {
@@ -24,9 +22,8 @@ class Add extends Component {
   onSubmit = (e) => {
     e.preventDefault()
     const {  title, author, content } = this.state
-    const url = currentURL
 
-    axios.post(url, { title, author, content })
+    axios.post(reqArticles, { title, author, content })
       .then(res => {
         console.log(res)
       })
@@ -36,7 +33,6 @@ class Add extends Component {
       author: '',
       content: ''
     })
-    console.log(this.state)
   }
 
   render () {

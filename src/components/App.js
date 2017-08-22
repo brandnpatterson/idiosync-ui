@@ -15,29 +15,50 @@ import styled from 'styled-components'
 
 const image = 'images/landing.jpg'
 
-const devURL = 'http://localhost:3000/api/v1/articles'
-// const prodURL = ''
-const currentURL = devURL
+const reqArticles = 'http://localhost:3000/api/v1/articles'
+const reqSession = 'http://localhost:3000/api/v1/sessions'
 
 class App extends Component {
   constructor () {
     super()
     this.state = {
       articles: [],
-      search: '',
-      authenticated: true
+      authenticated: false,
+      email: '',
+      password: '',
+      search: ''
     }
   }
 
   componentDidMount () {
-    // posts
-    const url = currentURL
-    axios.get(url)
+    axios.get(reqArticles)
       .then(res => {
         const articles = res.data
         this.setState({ articles })
       })
       .catch(err => console.log(err))
+  }
+
+  login = (e) => {
+    e.preventDefault()
+
+    axios.post(reqSession, {
+      email: this.state.email,
+      password: this.state.password
+    })
+    .then(res => {
+      if (res) {
+        this.setState({
+          authenticated: true
+        })
+      }
+      console.log(res)
+    })
+    .catch(err => console.log(err))
+    this.setState({
+      email: '',
+      password: ''
+    })
   }
 
   resetSearch = () => {
@@ -48,13 +69,26 @@ class App extends Component {
 
   updateSearch = (e) => {
     this.setState({
-      search: e.target.value.substr(0, 20),
+      search: e.target.value.substr(0, 20)
+    })
+  }
+
+  updateEmail = (e) => {
+    this.setState({
+      email: e.target.value.substr(0, 50)
+    })
+  }
+
+  updatePassword = (e) => {
+    this.setState({
+      password: e.target.value.substr(0, 50)
     })
   }
 
   render () {
+    console.log(this.state.authenticated)
     const { authenticated, articles, search } = this.state
-    let filteredArticles = [];
+    let filteredArticles = []
 
     if (search !== '') {
       filteredArticles = articles.filter(article => {
@@ -100,13 +134,22 @@ class App extends Component {
           {/* <Route path="/search" render={() => {
             return <SearchResults filteredArticles={filteredArticles} search={search} />
           }} /> */}
+          { /* Log In */ }
+          <Route exact path="/login" render={() => {
+            return <Login
+              email={this.state.email}
+              login={this.login}
+              password={this.state.password}
+              updateEmail={this.updateEmail}
+              updatePassword={this.updatePassword}
+            />
+          }} />
           { /* Static Routes */ }
           <Route exact path="/about" component={About} />
           <Route exact path="/add" render={() => {
             return <Add authenticated={authenticated} />
           }} />
           <Route exact path="/register" component={SignUp} />
-          <Route exact path="/login" component={Login} />
           <Route component={NotFound} />
         </Switch>
       </Div>
