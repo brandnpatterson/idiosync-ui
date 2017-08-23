@@ -9,7 +9,6 @@ import Header from './Header'
 import Login from './Login'
 import Article from './Article'
 import NotFound from './NotFound'
-// import SearchResults from './SearchResults'
 import SignUp from './SignUp'
 import styled from 'styled-components'
 
@@ -51,14 +50,23 @@ class App extends Component {
         localEmail: localEmail
       })
     }
+    setTimeout(() =>{
+      console.log(this.state.authenticated, localStorage)
+    }, 0)
   }
 
   logout = () => {
-    this.setState({
-      authenticated: false
-    })
-    localStorage.setItem('authenticated', this.state.authenticated)
+    localStorage.setItem('authenticated', false)
     localStorage.setItem('email', '')
+
+    const localAuth = localStorage.getItem('authenticated')
+
+    this.setState({
+      authenticated: localAuth
+    })
+    setTimeout(() =>{
+      console.log(this.state.authenticated, localStorage)
+    }, 0)
   }
 
   login = (e) => {
@@ -84,17 +92,17 @@ class App extends Component {
         localStorage.setItem('authenticated', this.state.authenticated)
         localStorage.setItem('email', this.state.localEmail)
       }
-    })
-    .then(res => {
-
+      console.log(this.state.authenticated, localStorage)
     })
     .catch(err => console.log(err))
   }
 
   resetSearch = () => {
-    this.setState({
-      search: ''
-    })
+    if (this.state.search !== '') {
+      this.setState({
+        search: ''
+      })
+    }
   }
 
   updateSearch = (e) => {
@@ -129,10 +137,9 @@ class App extends Component {
 
     filteredArticles.length = 3
 
-    // onClick={this.resetSearch}
     return (
       <Div>
-        <div>
+        <div onClick={this.resetSearch}>
           <Header
             articles={articles}
             authenticated={authenticated}
@@ -161,10 +168,6 @@ class App extends Component {
                     article={articles.find(p => p.id === parseInt(match.params.index, 10))}
                   />
           }} />
-          { /* Search Results */ }
-          {/* <Route path="/search" render={() => {
-            return <SearchResults filteredArticles={filteredArticles} search={search} />
-          }} /> */}
           { /* Log In */ }
           <Route exact path="/login" render={() => {
             return <Login
