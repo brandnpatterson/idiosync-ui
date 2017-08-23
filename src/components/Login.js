@@ -1,4 +1,5 @@
 import React from 'react'
+import { func, string } from 'prop-types'
 import LoginForm from './themes/Form'
 
 const Login = ({ email, login, password, updateEmail, updatePassword }) => {
@@ -34,6 +35,14 @@ const Login = ({ email, login, password, updateEmail, updatePassword }) => {
       </div>
     </LoginForm>
   )
+}
+
+Login.propTypes = {
+  email: string.isRequired,
+  login: func.isRequired,
+  password: string.isRequired,
+  updateEmail: func.isRequired,
+  updatePassword: func.isRequired
 }
 
 export default Login

@@ -19,13 +19,16 @@ class Add extends Component {
     this.setState( {[e.target.name]: e.target.value} )
   }
 
-  onSubmit = (e) => {
+  postRequest = (e) => {
     e.preventDefault()
     const {  title, author, content } = this.state
+    const { getRequest } = this.props
 
-    axios.post(reqArticles, { title, author, content })
+    axios.post(reqArticles, {
+        title, author, content
+      })
       .then(res => {
-        console.log(res)
+        getRequest()
       })
       .catch(err => console.log(err))
     this.setState({
@@ -39,7 +42,7 @@ class Add extends Component {
     const { author, content, title } = this.state
     return (
       this.props.authenticated === true
-      ? <AddForm onSubmit={this.onSubmit} method="post" autoComplete="off">
+      ? <AddForm onSubmit={this.postRequest} method="post" autoComplete="off">
           <div className="formgroup">
             <h2>Add Article</h2>
           </div>

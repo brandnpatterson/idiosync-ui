@@ -25,13 +25,30 @@ class App extends Component {
       authenticated: false,
       email: '',
       password: '',
-      localEmail: '',
-      localPassword: '',
+      request: false,
       search: ''
     }
   }
 
+  componentWillMount () {
+    let localAuth = localStorage.getItem('authenticated')
+
+    if (localAuth === 'true') {
+      this.setState({
+        authenticated: true
+      })
+    }
+    setTimeout(() =>{
+      console.log(this.state.authenticated, localStorage)
+    }, 0)
+  }
+
   componentDidMount () {
+    this.getRequest()
+  }
+
+  // get articles
+  getRequest = () => {
     axios.get(reqArticles)
       .then(res => {
         const articles = res.data
@@ -40,19 +57,29 @@ class App extends Component {
       .catch(err => console.log(err))
   }
 
-  componentWillMount () {
-    const localAuth = localStorage.getItem('authenticated')
-    const localEmail = localStorage.getItem('email')
+  // authentication
+  login = (e) => {
+    e.preventDefault()
 
-    if (localAuth === 'true') {
-      this.setState({
-        authenticated: true,
-        localEmail: localEmail
-      })
-    }
-    setTimeout(() =>{
+    const { email, password } = this.state
+
+    axios.post(reqSession, {
+      email: email,
+      password: password
+    })
+    .then(res => {
+      if (res) {
+        localStorage.setItem('email', this.state.email)
+        this.setState({
+          authenticated: true,
+          email: '',
+          password: ''
+        })
+        localStorage.setItem('authenticated', this.state.authenticated)
+      }
       console.log(this.state.authenticated, localStorage)
-    }, 0)
+    })
+    .catch(err => console.log(err))
   }
 
   logout = () => {
@@ -69,34 +96,7 @@ class App extends Component {
     }, 0)
   }
 
-  login = (e) => {
-    e.preventDefault()
-
-    const { email, password } = this.state
-
-    axios.post(reqSession, {
-      email: email,
-      password: password
-    })
-    .then(res => {
-      if (res) {
-        this.setState({
-          localEmail: this.state.email,
-          localPassword: this.state.password
-        })
-        this.setState({
-          authenticated: true,
-          email: '',
-          password: ''
-        })
-        localStorage.setItem('authenticated', this.state.authenticated)
-        localStorage.setItem('email', this.state.localEmail)
-      }
-      console.log(this.state.authenticated, localStorage)
-    })
-    .catch(err => console.log(err))
-  }
-
+  // search
   resetSearch = () => {
     if (this.state.search !== '') {
       this.setState({
@@ -111,6 +111,7 @@ class App extends Component {
     })
   }
 
+  // email -- password
   updateEmail = (e) => {
     this.setState({
       email: e.target.value.substr(0, 50)
@@ -141,7 +142,6 @@ class App extends Component {
       <Div>
         <div onClick={this.resetSearch}>
           <Header
-            articles={articles}
             authenticated={authenticated}
             filteredArticles={filteredArticles}
             logout={this.logout}
@@ -163,10 +163,12 @@ class App extends Component {
           )}
           { /* Articles/:id */ }
           <Route path="/articles/:index" render={({ match }) => {
-            return <Article
-                    articles={articles}
-                    article={articles.find(p => p.id === parseInt(match.params.index, 10))}
-                  />
+            return (
+              <Article
+                articles={articles}
+                article={articles.find(p => p.id === parseInt(match.params.index, 10))}
+              />
+            )
           }} />
           { /* Log In */ }
           <Route exact path="/login" render={() => {
@@ -181,7 +183,7 @@ class App extends Component {
           { /* Static Routes */ }
           <Route exact path="/about" component={About} />
           <Route exact path="/add" render={() => {
-            return <Add authenticated={authenticated} />
+            return <Add authenticated={authenticated} getRequest={this.getRequest} />
           }} />
           <Route exact path="/register" component={SignUp} />
           <Route component={NotFound} />

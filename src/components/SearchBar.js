@@ -4,7 +4,7 @@ import { array, func, string } from 'prop-types'
 import MdSearch from 'react-icons/lib/md/search'
 import styled from 'styled-components'
 
-const SearchBar = ({ search, filteredArticles, updateSearch }) => {
+const SearchBar = ({  filteredArticles, search, updateSearch }) => {
 
   return (
     <SearchInput autoComplete="off">

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { array, func, string } from 'prop-types'
+import { array, bool, func, string } from 'prop-types'
 import styled from 'styled-components'
 import SearchBar from './SearchBar'
 
@@ -35,7 +35,9 @@ const Header = ({ authenticated, filteredArticles, logout, search, updateSearch 
 }
 
 Header.propTypes = {
+  authenticated: bool.isRequired,
   filteredArticles: array.isRequired,
+  logout: func.isRequired,
   search: string.isRequired,
   updateSearch: func.isRequired,
 }
