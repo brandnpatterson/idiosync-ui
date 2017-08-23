@@ -21,16 +21,16 @@ class App extends Component {
   constructor () {
     super()
     this.state = {
-      articles: [],
+      articles: null,
       authenticated: false,
       email: '',
       password: '',
-      request: false,
       search: ''
     }
   }
 
   componentWillMount () {
+    this.getRequest()
     let localAuth = localStorage.getItem('authenticated')
 
     if (localAuth === 'true') {
@@ -38,13 +38,6 @@ class App extends Component {
         authenticated: true
       })
     }
-    setTimeout(() =>{
-      console.log(this.state.authenticated, localStorage)
-    }, 0)
-  }
-
-  componentDidMount () {
-    this.getRequest()
   }
 
   // get articles
@@ -77,7 +70,6 @@ class App extends Component {
         })
         localStorage.setItem('authenticated', this.state.authenticated)
       }
-      console.log(this.state.authenticated, localStorage)
     })
     .catch(err => console.log(err))
   }
@@ -86,14 +78,9 @@ class App extends Component {
     localStorage.setItem('authenticated', false)
     localStorage.setItem('email', '')
 
-    const localAuth = localStorage.getItem('authenticated')
-
     this.setState({
-      authenticated: localAuth
+      authenticated: false
     })
-    setTimeout(() =>{
-      console.log(this.state.authenticated, localStorage)
-    }, 0)
   }
 
   // search
@@ -162,14 +149,16 @@ class App extends Component {
             }} />
           )}
           { /* Articles/:id */ }
-          <Route path="/articles/:index" render={({ match }) => {
-            return (
-              <Article
-                articles={articles}
-                article={articles.find(p => p.id === parseInt(match.params.index, 10))}
-              />
-            )
-          }} />
+          {articles && (
+            <Route path="/articles/:index" render={({ match }) => {
+              return (
+                <Article
+                  articles={articles}
+                  article={articles.find(p => p.id === parseInt(match.params.index, 10))}
+                />
+              )
+            }} />
+          )}
           { /* Log In */ }
           <Route exact path="/login" render={() => {
             return <Login
@@ -186,7 +175,9 @@ class App extends Component {
             return <Add authenticated={authenticated} getRequest={this.getRequest} />
           }} />
           <Route exact path="/register" component={SignUp} />
-          <Route component={NotFound} />
+          {articles && (
+            <Route component={NotFound} />
+          )}
         </Switch>
       </Div>
     )

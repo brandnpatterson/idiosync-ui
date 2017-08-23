@@ -39,7 +39,7 @@ Header.propTypes = {
   filteredArticles: array.isRequired,
   logout: func.isRequired,
   search: string.isRequired,
-  updateSearch: func.isRequired,
+  updateSearch: func.isRequired
 }
 
 const Nav = styled.nav `

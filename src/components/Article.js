@@ -36,7 +36,7 @@ const Article = ({ article, articles }) => {
 }
 
 Article.propTypes = {
-  article: object.isRequired,
+  article: object,
   articles: array.isRequired
 }
 
