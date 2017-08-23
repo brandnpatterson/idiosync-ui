@@ -12,7 +12,7 @@ import NotFound from './NotFound'
 import SignUp from './SignUp'
 import styled from 'styled-components'
 
-const image = 'images/landing.jpg'
+const landingImg = 'images/landing.jpg'
 
 const reqArticles = 'http://localhost:3000/api/v1/articles'
 const reqSession = 'http://localhost:3000/api/v1/sessions'
@@ -139,7 +139,7 @@ class App extends Component {
         <Switch>
           <Route exact path="/" render={() => (
             <Link to="/articles">
-              <Background src={image} alt="landing" />
+              <Background src={landingImg} alt="landing" />
             </Link>
           )} />
           { /* Articles */ }
