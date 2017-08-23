@@ -4,14 +4,13 @@ import { array, func, string } from 'prop-types'
 import styled from 'styled-components'
 import SearchBar from './SearchBar'
 
-const Header = ({ authenticated, filteredArticles, search, updateSearch }) => {
+const Header = ({ authenticated, filteredArticles, logout, search, updateSearch }) => {
   return (
     <Nav>
       <ul className="left">
         <li><Link to="/">Idiosync</Link></li>
         <li><Link to="/articles">Articles</Link></li>
         <li><Link to="/about">About</Link></li>
-        <li><Link to="/login">Log In</Link></li>
       </ul>
       <ul className="right">
         <li><SearchBar
@@ -25,8 +24,11 @@ const Header = ({ authenticated, filteredArticles, search, updateSearch }) => {
         authenticated === true
         ? <ul className="right">
             <li><Link to="/add">Add</Link></li>
+            <li onClick={logout}><Link to="/">Log Out</Link></li>
           </ul>
-        : null
+        : <ul className="right">
+            <li><Link to="/login">Log In</Link></li>
+          </ul>
       }
     </Nav>
   )

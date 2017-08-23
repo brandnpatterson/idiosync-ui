@@ -26,6 +26,8 @@ class App extends Component {
       authenticated: false,
       email: '',
       password: '',
+      localEmail: '',
+      localPassword: '',
       search: ''
     }
   }
@@ -39,26 +41,54 @@ class App extends Component {
       .catch(err => console.log(err))
   }
 
+  componentWillMount () {
+    const localAuth = localStorage.getItem('authenticated')
+    const localEmail = localStorage.getItem('email')
+
+    if (localAuth === 'true') {
+      this.setState({
+        authenticated: true,
+        localEmail: localEmail
+      })
+    }
+  }
+
+  logout = () => {
+    this.setState({
+      authenticated: false
+    })
+    localStorage.setItem('authenticated', this.state.authenticated)
+    localStorage.setItem('email', '')
+  }
+
   login = (e) => {
     e.preventDefault()
 
+    const { email, password } = this.state
+
     axios.post(reqSession, {
-      email: this.state.email,
-      password: this.state.password
+      email: email,
+      password: password
     })
     .then(res => {
       if (res) {
         this.setState({
-          authenticated: true
+          localEmail: this.state.email,
+          localPassword: this.state.password
         })
+        this.setState({
+          authenticated: true,
+          email: '',
+          password: ''
+        })
+        localStorage.setItem('authenticated', this.state.authenticated)
+        localStorage.setItem('email', this.state.localEmail)
       }
-      console.log(res)
+    })
+    .then(res => {
+
     })
     .catch(err => console.log(err))
-    this.setState({
-      email: '',
-      password: ''
-    })
   }
 
   resetSearch = () => {
@@ -86,7 +116,6 @@ class App extends Component {
   }
 
   render () {
-    console.log(this.state.authenticated)
     const { authenticated, articles, search } = this.state
     let filteredArticles = []
 
@@ -100,13 +129,15 @@ class App extends Component {
 
     filteredArticles.length = 3
 
+    // onClick={this.resetSearch}
     return (
       <Div>
-        <div onClick={this.resetSearch}>
+        <div>
           <Header
             articles={articles}
             authenticated={authenticated}
             filteredArticles={filteredArticles}
+            logout={this.logout}
             search={search}
             updateSearch={this.updateSearch}
           />

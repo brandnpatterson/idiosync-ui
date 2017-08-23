@@ -3,7 +3,7 @@ import LoginForm from './themes/Form'
 
 const Login = ({ email, login, password, updateEmail, updatePassword }) => {
   return (
-    <LoginForm onSubmit={login} method="post">
+    <LoginForm action="/articles" onSubmit={login} method="post">
       <div className="formgroup">
         <h2>Log In</h2>
       </div>
@@ -25,7 +25,12 @@ const Login = ({ email, login, password, updateEmail, updatePassword }) => {
         </label>
       </div>
       <div className="formgroup">
-        <input className="post-data button" type="submit" name="submit" value="Log In" />
+        <input
+          className="post-data button"
+          type="submit"
+          name="submit"
+          value="Log In"
+        />
       </div>
     </LoginForm>
   )
