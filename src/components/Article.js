@@ -8,13 +8,6 @@ const Article = ({ article, articles }) => {
 
   const tags = article.tags
 
-  const filterdArticles = articles.map(article => {
-    return article.tags.map(tag => {
-      return tag.name
-    })
-  })
-  console.log(filterdArticles)
-
   return (
     <Div>
       <header>
