@@ -5,6 +5,7 @@ import styled from 'styled-components'
 
 const Tags = ({ articles, tags }) => {
 
+  // access articles.tags to be used in tags state
   articles.map(article => {
     return article.tags.filter(tag => {
 
