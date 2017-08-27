@@ -6,6 +6,15 @@ import styled from 'styled-components'
 const Article = ({ article, articles }) => {
   const total = articles.length
 
+  const tags = article.tags
+
+  const filterdArticles = articles.map(article => {
+    return article.tags.map(tag => {
+      return tag.name
+    })
+  })
+  console.log(filterdArticles)
+
   return (
     <Div>
       <header>
@@ -31,6 +40,13 @@ const Article = ({ article, articles }) => {
         </div>
       </header>
       <p>{article.content}</p>
+      <ul>
+        {
+          tags.map(tag => {
+            return <Link className="tags" key={tag.id} to=''><li>{tag.name}</li></Link>
+          })
+        }
+      </ul>
     </Div>
   )
 }
@@ -39,7 +55,6 @@ Article.propTypes = {
   article: object,
   articles: array.isRequired
 }
-
 
 const Div = styled.div`
   margin: 0 auto;
@@ -50,6 +65,9 @@ const Div = styled.div`
   }
   button {
     margin: 1.5em 0 0 0.5em;
+  }
+  .tags {
+    color: blue;
   }
 `
 
