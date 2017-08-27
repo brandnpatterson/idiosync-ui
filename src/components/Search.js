@@ -4,7 +4,7 @@ import { array, func, string } from 'prop-types'
 import MdSearch from 'react-icons/lib/md/search'
 import styled from 'styled-components'
 
-const SearchBar = ({  filteredArticles, search, updateSearch }) => {
+const Search = ({  filteredArticles, search, updateSearch }) => {
 
   return (
     <SearchInput autoComplete="off">
@@ -30,12 +30,13 @@ const SearchBar = ({  filteredArticles, search, updateSearch }) => {
   )
 }
 
-SearchBar.propTypes = {
+Search.propTypes = {
   filteredArticles: array.isRequired,
   search: string.isRequired,
   updateSearch: func.isRequired
 }
 
+// style
 const SearchInput = styled.div `
   display: flex;
   align-items: center;
@@ -80,4 +81,4 @@ const SearchInput = styled.div `
   }
 `
 
-export default SearchBar
+export default Search

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link, Switch, Route } from 'react-router-dom'
 import axios from 'axios'
+import styled from 'styled-components'
 
 import About from './About'
 import Add from './Add'
@@ -10,7 +11,7 @@ import Login from './Login'
 import Article from './Article'
 import NotFound from './NotFound'
 import SignUp from './SignUp'
-import styled from 'styled-components'
+import Tags from './Tags'
 
 const landingImg = 'images/landing.jpg'
 
@@ -25,7 +26,8 @@ class App extends Component {
       authenticated: false,
       email: '',
       password: '',
-      search: ''
+      search: '',
+      tags: []
     }
   }
 
@@ -112,7 +114,8 @@ class App extends Component {
   }
 
   render () {
-    const { authenticated, articles, search } = this.state
+    const { authenticated, articles, search, tags } = this.state
+
     let filteredArticles = []
 
     if (search !== '') {
@@ -146,6 +149,12 @@ class App extends Component {
           {articles && (
             <Route exact path="/articles" render={() => {
               return <Home articles={articles} />
+            }} />
+          )}
+          { /* Tags */ }
+          {articles && (
+            <Route exact path="/tags" render={() => {
+              return <Tags articles={articles} tags={tags} />
             }} />
           )}
           { /* Articles/:id */ }
@@ -184,6 +193,7 @@ class App extends Component {
   }
 }
 
+// style
 const Background = styled.img `
   width: 100%;
 `

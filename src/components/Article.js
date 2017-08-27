@@ -49,6 +49,7 @@ Article.propTypes = {
   articles: array.isRequired
 }
 
+// style
 const Div = styled.div`
   margin: 0 auto;
   width: 70%;

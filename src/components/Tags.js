@@ -3,7 +3,29 @@ import { Link } from 'react-router-dom'
 import { array } from 'prop-types'
 import styled from 'styled-components'
 
-const Home = ({ articles }) => {
+const Tags = ({ articles, tags }) => {
+
+  articles.map(article => {
+    return article.tags.filter(tag => {
+
+      // article.tag => tags
+      tags.push(tag)
+
+      // reduce
+      const reducedTags = tags.reduce((first, second) => {
+        // if the next object's id is not found in the output array
+        if (!first.some((el) => {
+          return el.id === second.id;
+        }))
+        // push the object into the output array
+        first.push(second)
+        return first
+      }, [])
+      tags = reducedTags
+      return tags
+    })
+  })
+
   return (
     <TableOfContents>
       <div className="outer">
@@ -12,13 +34,10 @@ const Home = ({ articles }) => {
           <h2>Articles</h2>
           <hr />
           {
-            articles.map(article => (
-              <ul key={article.id}>
-                <li className="author">
-                  {article.author}
-                </li>
+            tags.map(tag => (
+              <ul key={tag.id}>
                 <li className="title">
-                  <Link to={`/articles/${article.id}`}>{article.title}</Link>
+                  <Link to={`/tags/${tag.id}`}>{tag.name}</Link>
                 </li>
               </ul>
             ))
@@ -29,7 +48,7 @@ const Home = ({ articles }) => {
   )
 }
 
-Home.propTypes = {
+Tags.propTypes = {
   articles: array.isRequired
 }
 
@@ -75,4 +94,4 @@ const TableOfContents = styled.div `
   }
 `
 
-export default Home
+export default Tags
