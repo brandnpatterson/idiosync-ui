@@ -5,13 +5,11 @@ import styled from 'styled-components'
 
 const Tags = ({ articles, tags }) => {
 
-  // access articles.tags to be used in tags state
+  // access each article.tags to be used in tags state
   articles.map(article => {
-    return article.tags.filter(tag => {
-
+    return article.tags.map(tag => {
       // article.tag => tags
       tags.push(tag)
-
       // reduce
       const reducedTags = tags.reduce((first, second) => {
         // if the next object's id is not found in the output array

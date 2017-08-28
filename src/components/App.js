@@ -184,9 +184,7 @@ class App extends Component {
             return <Add authenticated={authenticated} getRequest={this.getRequest} />
           }} />
           <Route exact path="/register" component={SignUp} />
-          {articles && (
-            <Route component={NotFound} />
-          )}
+          <Route component={NotFound} />
         </Switch>
       </Div>
     )
