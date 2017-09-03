@@ -5,27 +5,6 @@ import styled from 'styled-components'
 
 const Tags = ({ articles, tags }) => {
 
-  // access each article.tags to be used in tags state
-  articles.map(article => {
-    return article.tags.map(tag => {
-      // article.tag => tags
-      tags.push(tag)
-      // reduce
-      const reducedTags = tags.reduce((first, second) => {
-        // if the next object's id is not found in the output array
-        if (!first.some((el) => {
-          return el.id === second.id;
-        }))
-        // push the object into the output array
-        first.push(second)
-        return first
-      }, [])
-      tags = reducedTags
-
-      return tags
-    })
-  })
-
   return (
     <TagsDiv>
       <h2>Tags</h2>
@@ -38,22 +17,6 @@ const Tags = ({ articles, tags }) => {
           ))
         }
       </ul>
-      <div className="inner">
-        <h2>Articles</h2>
-        <hr />
-        {
-          articles.map(article => (
-            <ul key={article.id}>
-              <li className="author">
-                {article.author}
-              </li>
-              <li className="title">
-                <Link to={`/articles/${article.id}`}>{article.title}</Link>
-              </li>
-            </ul>
-          ))
-        }
-      </div>
     </TagsDiv>
   )
 }

@@ -11,6 +11,7 @@ import Login from './Login'
 import Article from './Article'
 import NotFound from './NotFound'
 import SignUp from './SignUp'
+import Tag from './Tag'
 import Tags from './Tags'
 
 const landingImg = 'images/landing.jpg'
@@ -40,6 +41,9 @@ class App extends Component {
         authenticated: true
       })
     }
+    setTimeout(() => {
+      this.setTags()
+    }, 100)
   }
 
   // get articles
@@ -50,6 +54,31 @@ class App extends Component {
         this.setState({ articles })
       })
       .catch(err => console.log(err))
+  }
+
+  // set tags
+  setTags = () => {
+    const { articles, tags } = this.state
+    // access each article.tags to be used in tags state
+    articles.forEach(article => {
+      article.tags.forEach(tag => {
+        // article.tag => tags
+        tags.push(tag)
+        // reduce any duplicates
+        const reducedTags = tags.reduce((first, second) => {
+          // if the next object's id is not found in the output array
+          if (!first.some((el) => {
+            return el.id === second.id;
+          }))
+          // push the object into the output array
+          first.push(second)
+          return first
+        }, [])
+        this.setState({
+          tags: reducedTags
+        })
+      })
+    })
   }
 
   // authentication
@@ -151,19 +180,35 @@ class App extends Component {
               return <Home articles={articles} />
             }} />
           )}
-          { /* Tags */ }
-          {articles && (
-            <Route exact path="/tags" render={() => {
-              return <Tags articles={articles} tags={tags} />
-            }} />
-          )}
           { /* Articles/:id */ }
           {articles && (
             <Route path="/articles/:index" render={({ match }) => {
               return (
                 <Article
                   articles={articles}
-                  article={articles.find(p => p.id === parseInt(match.params.index, 10))}
+                  article={articles.find(a => a.id === parseInt(match.params.index, 10))}
+                />
+              )
+            }} />
+          )}
+          { /* Tags */ }
+          {articles && (
+            <Route exact path="/tags" render={() => {
+              return <Tags articles={articles} tags={tags} />
+            }} />
+          )}
+          { /* Tags/:id */ }
+          {articles && (
+            <Route path="/tags/:index" render={({ match }) => {
+              return (
+                <Tag
+                  articles={
+                    articles.map(article => {
+                      return article.tags.filter(tag => {
+                        return tag.id === parseInt(match.params.index, 10)
+                      })
+                    })
+                  }
                 />
               )
             }} />
