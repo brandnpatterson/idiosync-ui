@@ -36,7 +36,7 @@ const Article = ({ article, articles }) => {
       <ul>
         {
           tags.map(tag => {
-            return <Link className="tags" key={tag.id} to=''><li>{tag.name}</li></Link>
+            return <Link className="tags" key={tag.id} to={`/tags/${tag.name}`}><li>{tag.name}</li></Link>
           })
         }
       </ul>

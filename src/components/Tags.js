@@ -12,7 +12,7 @@ const Tags = ({ articles, tags }) => {
         {
           tags.map(tag => (
             <li key={tag.id} className="title">
-              <Link to={`/tags/${tag.id}`}>{tag.name}</Link>
+              <Link to={`/tags/${tag.name}`}>{tag.name}</Link>
             </li>
           ))
         }

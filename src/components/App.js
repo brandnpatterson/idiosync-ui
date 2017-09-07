@@ -5,13 +5,13 @@ import styled from 'styled-components'
 
 import About from './About'
 import Add from './Add'
+import FilterByTag from './FilterByTag'
 import Home from './Home'
 import Header from './Header'
 import Login from './Login'
 import Article from './Article'
 import NotFound from './NotFound'
 import SignUp from './SignUp'
-import Tag from './Tag'
 import Tags from './Tags'
 
 const landingImg = 'images/landing.jpg'
@@ -43,7 +43,7 @@ class App extends Component {
     }
     setTimeout(() => {
       this.setTags()
-    }, 100)
+    }, 400)
   }
 
   // get articles
@@ -59,6 +59,7 @@ class App extends Component {
   // set tags
   setTags = () => {
     const { articles, tags } = this.state
+
     // access each article.tags to be used in tags state
     articles.forEach(article => {
       article.tags.forEach(tag => {
@@ -149,10 +150,9 @@ class App extends Component {
 
     if (search !== '') {
       filteredArticles = articles.filter(article => {
-        return article.title.toLowerCase().indexOf(
-          search.toLowerCase()) !== -1
-        }
-      )
+        return article.title.toLowerCase()
+          .indexOf(search.toLowerCase()) !== -1
+      })
     }
 
     filteredArticles.length = 3
@@ -199,17 +199,22 @@ class App extends Component {
           )}
           { /* Tags/:id */ }
           {articles && (
-            <Route path="/tags/:index" render={({ match }) => {
+            <Route path="/tags/:tagName" render={({ match }) => {
               return (
-                <Tag
-                  articles={
+                <FilterByTag
+                  match={match}
+                  tags={tags}
+                  filterByTag={
                     articles.map(article => {
-                      return article.tags.filter(tag => {
-                        return tag.id === parseInt(match.params.index, 10)
+                      return article.tags.map(tag => {
+                        if (tag.name === match.params.tagName) {
+                          return article
+                        } else {
+                          return null
+                        }
                       })
                     })
-                  }
-                />
+                  } />
               )
             }} />
           )}

@@ -1,19 +1,30 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { array } from 'prop-types'
 import styled from 'styled-components'
 
-const Home = ({ articles }) => {
+const FilterByTag = ({ filterByTag, match }) => {
+
+  const filteredArticles = []
+
+  filterByTag.map(itemToFilter => {
+    return itemToFilter.filter(f => {
+      if (f !== null) {
+        return filteredArticles.push(f)
+      } else {
+        return false
+      }
+    })
+  })
 
   return (
     <TableOfContents>
       <div className="outer">
-        <h2 className="title">Idiosync</h2>
+        <h2 className="title">{match.params.tagName}</h2>
         <div className="inner">
           <h2>Articles</h2>
           <hr />
           {
-            articles.map(article => (
+            filteredArticles.map(article => (
               <ul key={article.id}>
                 <li className="author">
                   {article.author}
@@ -28,10 +39,6 @@ const Home = ({ articles }) => {
       </div>
     </TableOfContents>
   )
-}
-
-Home.propTypes = {
-  articles: array.isRequired
 }
 
 // style
@@ -76,4 +83,4 @@ const TableOfContents = styled.div `
   }
 `
 
-export default Home
+export default FilterByTag
