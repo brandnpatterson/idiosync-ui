@@ -11,7 +11,8 @@ class Add extends Component {
     this.state = {
       title: '',
       author: '',
-      content: ''
+      content: '',
+      tag_list: ''
     }
   }
 
@@ -21,25 +22,33 @@ class Add extends Component {
 
   postRequest = (e) => {
     e.preventDefault()
-    const {  title, author, content } = this.state
+    const {  title, author, content, tag_list } = this.state
     const { getRequest } = this.props
 
-    axios.post(reqArticles, {
-        title, author, content
-      })
-      .then(res => {
+    const postObj = {
+      title,
+      author,
+      content,
+      tag_list
+    }
+
+    console.log(postObj)
+
+    axios.post(reqArticles, postObj)
+      .then(() => {
         getRequest()
       })
       .catch(err => console.log(err))
     this.setState({
       title: '',
       author: '',
-      content: ''
+      content: '',
+      tag_list: ''
     })
   }
 
   render () {
-    const { author, content, title } = this.state
+    const { author, content, title, tag_list } = this.state
     return (
       this.props.authenticated === true
       ? <AddForm onSubmit={this.postRequest} method="post" autoComplete="off">
@@ -59,6 +68,11 @@ class Add extends Component {
           <div className="formgroup">
             <label htmlFor="content"> Content:
               <textarea value={content} onChange={this.onChange} name="content" id="content" />
+            </label>
+          </div>
+          <div className="formgroup">
+            <label htmlFor="tag_list"> Tags:
+              <input value={tag_list} onChange={this.onChange} name="tag_list" type="text" id="tag_list" />
             </label>
           </div>
           <div className="formgroup">
