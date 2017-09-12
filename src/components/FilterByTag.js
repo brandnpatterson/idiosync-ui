@@ -17,7 +17,7 @@ const FilterByTag = ({ filterByTag, match }) => {
   })
 
   return (
-    <TableOfContents>
+    <FilterByTagWrapper>
       <div className="outer">
         <h2 className="title">{match.params.tagName}</h2>
         <div className="inner">
@@ -37,12 +37,12 @@ const FilterByTag = ({ filterByTag, match }) => {
           }
         </div>
       </div>
-    </TableOfContents>
+    </FilterByTagWrapper>
   )
 }
 
 // style
-const TableOfContents = styled.div `
+const FilterByTagWrapper = styled.div `
   background: whitesmoke;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1), 0 5px 10px rgba(0, 0, 0, 0.05);
   margin: 5em auto;

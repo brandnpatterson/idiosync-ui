@@ -9,7 +9,7 @@ const Article = ({ article, articles }) => {
   const tags = article.tags
 
   return (
-    <Div>
+    <ArticleWrapper>
       <header>
         <div>
           <h2>{article.title}</h2>
@@ -40,7 +40,7 @@ const Article = ({ article, articles }) => {
           })
         }
       </ul>
-    </Div>
+    </ArticleWrapper>
   )
 }
 
@@ -50,7 +50,7 @@ Article.propTypes = {
 }
 
 // style
-const Div = styled.div`
+const ArticleWrapper = styled.div`
   margin: 0 auto;
   width: 70%;
   header {

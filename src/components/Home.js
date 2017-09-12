@@ -6,9 +6,9 @@ import styled from 'styled-components'
 const Home = ({ articles }) => {
 
   return (
-    <TableOfContents>
+    <HomeWrapper>
       <div className="outer">
-        <h2 className="title">Idiosync</h2>
+        <h2 className="title">IDIOSYNC</h2>
         <div className="inner">
           <h2>Articles</h2>
           <hr />
@@ -26,7 +26,7 @@ const Home = ({ articles }) => {
           }
         </div>
       </div>
-    </TableOfContents>
+    </HomeWrapper>
   )
 }
 
@@ -35,7 +35,7 @@ Home.propTypes = {
 }
 
 // style
-const TableOfContents = styled.div `
+const HomeWrapper = styled.div `
   background: whitesmoke;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1), 0 5px 10px rgba(0, 0, 0, 0.05);
   margin: 5em auto;

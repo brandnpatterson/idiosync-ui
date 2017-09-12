@@ -43,7 +43,7 @@ class App extends Component {
     }
     setTimeout(() => {
       this.setTags()
-    }, 400)
+    }, 500)
   }
 
   // get articles
@@ -158,7 +158,7 @@ class App extends Component {
     filteredArticles.length = 3
 
     return (
-      <Div>
+      <AppWrapper>
         <div onClick={this.resetSearch}>
           <Header
             authenticated={authenticated}
@@ -214,7 +214,8 @@ class App extends Component {
                         }
                       })
                     })
-                  } />
+                  }
+                />
               )
             }} />
           )}
@@ -236,7 +237,7 @@ class App extends Component {
           <Route exact path="/register" component={SignUp} />
           <Route component={NotFound} />
         </Switch>
-      </Div>
+      </AppWrapper>
     )
   }
 }
@@ -245,8 +246,8 @@ class App extends Component {
 const Background = styled.img `
   width: 100%;
 `
-const Div = styled.div `
-  font-family: sans-serif;
+const AppWrapper = styled.div `
+  font-family: serif;
   li {
     list-style-type: none;
     a {
