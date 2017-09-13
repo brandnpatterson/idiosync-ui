@@ -1,6 +1,6 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { array, object } from 'prop-types'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 const Article = ({ article, articles, authors }) => {
@@ -58,8 +58,9 @@ const Article = ({ article, articles, authors }) => {
 }
 
 Article.propTypes = {
-  article: object,
-  articles: array.isRequired
+  article: object.isRequired,
+  articles: array.isRequired,
+  authors: array.isRequired
 }
 
 // style

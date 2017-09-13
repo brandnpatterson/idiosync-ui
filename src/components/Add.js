@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
+import { array, bool, func } from 'prop-types'
 import axios from 'axios'
+
 import AddForm from './themes/Form'
 import NotFound from './NotFound'
 
@@ -132,6 +134,12 @@ class Add extends Component {
       : <NotFound />
     )
   }
+}
+
+Add.propType = {
+  authenticated: bool.isRequired,
+  authors: array.isRequired,
+  getRequest: func.isRequred
 }
 
 export default Add

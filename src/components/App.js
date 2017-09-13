@@ -11,7 +11,6 @@ import Header from './Header'
 import Login from './Login'
 import Article from './Article'
 import NotFound from './NotFound'
-import SignUp from './SignUp'
 import Tags from './Tags'
 
 const landingImg = 'images/landing.jpg'
@@ -43,9 +42,6 @@ class App extends Component {
         authenticated: true
       })
     }
-    setTimeout(() => {
-      this.setTags()
-    }, 500)
   }
 
   // get articles
@@ -62,6 +58,10 @@ class App extends Component {
         this.setState({ authors })
       })
       .catch(err => console.log(err))
+
+    setTimeout(() => {
+      this.setTags()
+    }, 500)
   }
 
   // set tags
@@ -247,7 +247,6 @@ class App extends Component {
               return <Add authenticated={authenticated} authors={authors} getRequest={this.getRequest} />
             }} />
           )}
-          <Route exact path="/register" component={SignUp} />
           {articles && authors && (
             <Route component={NotFound} />
           )}
