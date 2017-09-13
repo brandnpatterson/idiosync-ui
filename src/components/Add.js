@@ -4,6 +4,7 @@ import AddForm from './themes/Form'
 import NotFound from './NotFound'
 
 const reqArticles = 'http://localhost:3000/api/v1/articles'
+const reqAuthors = 'http://localhost:3000/api/v1/authors'
 
 class Add extends Component {
   constructor () {
@@ -11,44 +12,84 @@ class Add extends Component {
     this.state = {
       title: '',
       author: '',
+      bio: '',
       content: '',
       tag_list: ''
     }
   }
 
   onChange = (e) => {
+    const { authors } = this.props
+
+    if (e.target.type === 'button') {
+      e.target.value = e.target.innerHTML
+
+      authors.map(author => {
+        if (author.name === e.target.innerHTML) {
+          return this.setState({
+            bio: author.bio
+          })
+        } else {
+          return null
+        }
+      })
+    }
     this.setState( {[e.target.name]: e.target.value} )
+
+    setTimeout(() => {
+      console.log(this.state)
+    }, 0)
   }
 
   postRequest = (e) => {
     e.preventDefault()
-    const {  title, author, content, tag_list } = this.state
-    const { getRequest } = this.props
+    const {  title, author, bio, content, tag_list } = this.state
+    const { authors, getRequest } = this.props
 
-    const postObj = {
+    const articlesObj = {
       title,
       author,
       content,
       tag_list
     }
 
-    console.log(postObj)
+    const authorsObj = {
+      name: author,
+      bio
+    }
 
-    axios.post(reqArticles, postObj)
+    axios.post(reqArticles, articlesObj)
       .then(() => {
         getRequest()
       })
       .catch(err => console.log(err))
+
+
+    const found = authors.some(a => a.name === authorsObj.name)
+
+    if (!found) {
+      axios.post(reqAuthors, authorsObj)
+        .then(() => {
+          getRequest()
+        })
+        .catch(err => console.log(err))
+    }
+
     this.setState({
       title: '',
       author: '',
+      bio: '',
       content: '',
       tag_list: ''
     })
   }
 
   render () {
-    const { author, content, title, tag_list } = this.state
+    let { author, bio, content, title, tag_list } = this.state
+    const { authors } = this.props
+
+    console.log(authors)
+
     return (
       this.props.authenticated === true
       ? <AddForm onSubmit={this.postRequest} method="post" autoComplete="off">
@@ -57,22 +98,31 @@ class Add extends Component {
           </div>
           <div className="formgroup">
             <label htmlFor="title"> Title:
-              <input value={title} onChange={this.onChange} name="title" type="text" id="title" autoFocus />
+              <input name="title" value={title} onChange={this.onChange} type="text" id="title" autoFocus />
             </label>
           </div>
           <div className="formgroup">
             <label htmlFor="author"> Author:
-              <input value={author} onChange={this.onChange} name="author" type="text" id="author" />
+              {
+                authors.map(a => (
+                  <button name="author" value={author} type="button" onClick={this.onChange} key={a.id}>{a.name}</button>
+                ))
+              }
+              <h2>New Author:</h2>
+              Name:
+              <input name="author" value={author} onChange={this.onChange} type="text" id="author" />
+              Bio:
+              <textarea name="bio" value={bio} onChange={this.onChange} />
             </label>
           </div>
           <div className="formgroup">
             <label htmlFor="content"> Content:
-              <textarea value={content} onChange={this.onChange} name="content" id="content" />
+              <textarea name="content" value={content} onChange={this.onChange} id="content" />
             </label>
           </div>
           <div className="formgroup">
             <label htmlFor="tag_list"> Tags:
-              <input value={tag_list} onChange={this.onChange} name="tag_list" type="text" id="tag_list" />
+              <input name="tag_list" value={tag_list} onChange={this.onChange} type="text" id="tag_list" />
             </label>
           </div>
           <div className="formgroup">

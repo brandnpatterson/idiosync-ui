@@ -18,6 +18,7 @@ const landingImg = 'images/landing.jpg'
 
 const reqArticles = 'http://localhost:3000/api/v1/articles'
 const reqSession = 'http://localhost:3000/api/v1/sessions'
+const reqAuthors = 'http://localhost:3000/api/v1/authors'
 
 class App extends Component {
   constructor () {
@@ -25,6 +26,7 @@ class App extends Component {
     this.state = {
       articles: null,
       authenticated: false,
+      authors: null,
       email: '',
       password: '',
       search: '',
@@ -54,6 +56,12 @@ class App extends Component {
         this.setState({ articles })
       })
       .catch(err => console.log(err))
+    axios.get(reqAuthors)
+      .then(res => {
+        const authors = res.data
+        this.setState({ authors })
+      })
+      .catch(err => console.log(err))
   }
 
   // set tags
@@ -61,25 +69,27 @@ class App extends Component {
     const { articles, tags } = this.state
 
     // access each article.tags to be used in tags state
-    articles.forEach(article => {
-      article.tags.forEach(tag => {
-        // article.tag => tags
-        tags.push(tag)
-        // reduce any duplicates
-        const reducedTags = tags.reduce((first, second) => {
-          // if the next object's id is not found in the output array
-          if (!first.some((el) => {
-            return el.id === second.id;
-          }))
-          // push the object into the output array
-          first.push(second)
-          return first
-        }, [])
-        this.setState({
-          tags: reducedTags
+    if (articles) {
+      articles.forEach(article => {
+        article.tags.forEach(tag => {
+          // article.tag => tags
+          tags.push(tag)
+          // reduce any duplicates
+          const reducedTags = tags.reduce((first, second) => {
+            // if the next object's id is not found in the output array
+            if (!first.some((el) => {
+              return el.id === second.id;
+            }))
+            // push the object into the output array
+            first.push(second)
+            return first
+          }, [])
+          this.setState({
+            tags: reducedTags
+          })
         })
       })
-    })
+    }
   }
 
   // authentication
@@ -144,7 +154,7 @@ class App extends Component {
   }
 
   render () {
-    const { authenticated, articles, search, tags } = this.state
+    const { authenticated, articles, authors, search, tags } = this.state
 
     let filteredArticles = []
 
@@ -187,6 +197,7 @@ class App extends Component {
                 <Article
                   articles={articles}
                   article={articles.find(a => a.id === parseInt(match.params.index, 10))}
+                  authors={authors}
                 />
               )
             }} />
@@ -231,11 +242,15 @@ class App extends Component {
           }} />
           { /* Static Routes */ }
           <Route exact path="/about" component={About} />
-          <Route exact path="/add" render={() => {
-            return <Add authenticated={authenticated} getRequest={this.getRequest} />
-          }} />
+          {authors && (
+            <Route exact path="/add" render={() => {
+              return <Add authenticated={authenticated} authors={authors} getRequest={this.getRequest} />
+            }} />
+          )}
           <Route exact path="/register" component={SignUp} />
-          <Route component={NotFound} />
+          {articles && authors && (
+            <Route component={NotFound} />
+          )}
         </Switch>
       </AppWrapper>
     )

@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom'
 import { array, object } from 'prop-types'
 import styled from 'styled-components'
 
-const Article = ({ article, articles }) => {
+const Article = ({ article, articles, authors }) => {
   const total = articles.length
 
   const tags = article.tags
+
+  console.log(authors)
 
   return (
     <ArticleWrapper>
@@ -37,6 +39,17 @@ const Article = ({ article, articles }) => {
         {
           tags.map(tag => {
             return <Link className="tags" key={tag.id} to={`/tags/${tag.name}`}><li>{tag.name}</li></Link>
+          })
+        }
+      </ul>
+      <ul>
+        {
+          authors.map(author => {
+            if (author.name === article.author) {
+              return <h2>{author.bio}</h2>
+            } else {
+              return null
+            }
           })
         }
       </ul>

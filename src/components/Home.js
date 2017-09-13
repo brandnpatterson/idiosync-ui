@@ -4,7 +4,7 @@ import { array } from 'prop-types'
 import styled from 'styled-components'
 
 const Home = ({ articles }) => {
-
+  
   return (
     <HomeWrapper>
       <div className="outer">
