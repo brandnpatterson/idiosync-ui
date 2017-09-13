@@ -19,9 +19,9 @@ class Add extends Component {
       author: '',
       bio: '',
       content: '',
+      tag_list: '',
       doubleClicked: false,
-      newAuthorSelect: false,
-      tag_list: ''
+      newAuthorSelect: false
     }
   }
 
@@ -146,6 +146,7 @@ class Add extends Component {
 
     const authorButtons = authors.map(a => (
       <button
+        data-active="false"
         name="author"
         value={author}
         type="button"
