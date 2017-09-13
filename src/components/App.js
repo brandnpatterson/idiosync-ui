@@ -244,7 +244,11 @@ class App extends Component {
           <Route exact path="/about" component={About} />
           {authors && (
             <Route exact path="/add" render={() => {
-              return <Add authenticated={authenticated} authors={authors} getRequest={this.getRequest} />
+              return <Add
+                authenticated={authenticated}
+                authors={authors}
+                getRequest={this.getRequest}
+              />
             }} />
           )}
           {articles && authors && (
