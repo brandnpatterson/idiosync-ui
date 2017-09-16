@@ -3,8 +3,9 @@ import { array, bool, func } from 'prop-types'
 import axios from 'axios'
 import styled from 'styled-components'
 
-import AddForm from './themes/Form'
-import EditForm from './themes/Form'
+import CreateArticle from './themes/Form'
+import CreateAuthor from './themes/Form'
+import EditAuthor from './themes/Form'
 import NotFound from './NotFound'
 
 const reqArticles = 'http://localhost:3000/api/v1/articles'
@@ -156,90 +157,96 @@ class Add extends Component {
     ))
 
     return (
-      <AddFormWrapper>
+      <CreateArticleWrapper>
         {this.props.authenticated === true
-          ? <AddForm
-              className={doubleClicked === true ? 'hidden' : 'visible'}
-              onSubmit={this.postRequest}
-              method="post"
-              autoComplete="off"
-            >
-              <div className="formgroup">
-                <h2>Add Article</h2>
-              </div>
-              <div className="formgroup">
-                <label htmlFor="title"> Title:
-                  <input name="title" value={title} onChange={this.onChange} type="text" id="title" autoFocus />
-                </label>
-              </div>
-              <div className="formgroup">
-                <label htmlFor="content"> Content:
-                  <textarea name="content" value={content} onChange={this.onChange} id="content" />
-                </label>
-              </div>
-              <div className="formgroup">
-                <label htmlFor="tag_list"> Tags:
-                  <input name="tag_list" value={tag_list} onChange={this.onChange} type="text" id="tag_list" />
-                </label>
-              </div>
-              <div className="author formgroup">
-                <label htmlFor="author">
-                  <div className={newAuthorSelect === false ? 'visible' : 'hidden'}>
-                    <div className="author-selection">
-                      <h2>Choose Author:</h2>
-                      <button type="button" onClick={this.toggleAuthorSelect}>Create New Author</button>
-                    </div>
-                    {authorButtons}
-                  </div>
-                  <div className={newAuthorSelect === true ? 'visible' : 'hidden'}>
-                    <div className="author-selection">
-                      <h2>New Author:</h2>
-                      <button type="button" onClick={this.toggleAuthorSelect}>Back to Authors</button>
-                    </div>
-                    Name:
-                    <input name="author" value={author} onChange={this.onChange} type="text" id="author" />
-                    Bio:
-                    <textarea name="bio" value={bio} onChange={this.onChange} />
-                    <input type="button" className="button create-new-author" name="create" value="Create" />
-                  </div>
-                </label>
-              </div>
-              <div className={newAuthorSelect === false ? 'visible formgroup' : 'hidden'}>
-                <input className="post-data button" name="submit" type="submit" value="Submit" />
-              </div>
-            </AddForm>
-          : <NotFound />}
+        ? <CreateArticle
+            className={
+              doubleClicked === true ? 'hidden' : 'visible' && newAuthorSelect === true ? 'hidden' : 'visible'
 
-          <EditForm
-            className={doubleClicked === true ? 'visible edit-form' : 'hidden'}
-            onSubmit={this.putRequest}
-            method="put"
+            }
+            onSubmit={this.postRequest}
+            method="post"
             autoComplete="off"
           >
-            <div className="formgroup edit-header">
-              <h2>Edit {author}</h2>
-              <div onClick={this.handleDoubleClick} className="close">X</div>
+            <div className="formgroup">
+              <h2>Add Article</h2>
             </div>
             <div className="formgroup">
-              <label htmlFor="author"> Author:
-                <input name="author" value={author} onChange={this.onChange} type="text" id="author" />
+              <label htmlFor="title"> Title:
+                <input name="title" value={title} onChange={this.onChange} type="text" id="title" autoFocus />
               </label>
             </div>
             <div className="formgroup">
-              <label htmlFor="bio">Bio:
-                <textarea className="edit-bio" name="bio" value={bio} onChange={this.onChange} />
+              <label htmlFor="content"> Content:
+                <textarea name="content" value={content} onChange={this.onChange} id="content" />
               </label>
             </div>
             <div className="formgroup">
-              <input className="button" name="submit" type="submit" value="Submit" />
+              <label htmlFor="tag_list"> Tags:
+                <input name="tag_list" value={tag_list} onChange={this.onChange} type="text" id="tag_list" />
+              </label>
             </div>
-          </EditForm>
-      </AddFormWrapper>
+            <div className="author formgroup">
+              <label htmlFor="author">
+                <div className={newAuthorSelect === false ? 'visible' : 'hidden'}>
+                  <div className="author-selection">
+                    <h2>Choose Author:</h2>
+                    <button type="button" onClick={this.toggleAuthorSelect}>Create New Author</button>
+                  </div>
+                  {authorButtons}
+                </div>
+              </label>
+            </div>
+            <div className={newAuthorSelect === false ? 'visible formgroup' : 'hidden'}>
+              <input className="post-data button" name="submit" type="submit" value="Submit" />
+            </div>
+          </CreateArticle>
+        : <NotFound />}
+        <CreateAuthor>
+          <div className={newAuthorSelect === true ? 'visible author formgroup' : 'hidden'}>
+            <div className="author-selection">
+              <h2>New Author:</h2>
+              <button type="button" onClick={this.toggleAuthorSelect}>Back to Authors</button>
+            </div>
+            <label htmlFor="edit-author"> Author:
+              <input name="author" value={author} onChange={this.onChange} type="text" id="author" />
+            </label>
+            <label htmlFor="bio"> Bio:
+              <textarea name="bio" value={bio} onChange={this.onChange} />
+            </label>
+            <input type="button" className="button create-new-author" name="create" value="Create" />
+          </div>
+        </CreateAuthor>
+        <EditAuthor
+          className={doubleClicked === true ? 'visible edit-form' : 'hidden'}
+          onSubmit={this.putRequest}
+          method="put"
+          autoComplete="off"
+        >
+          <div className="formgroup edit-header">
+            <h2>Edit {author}</h2>
+            <div onClick={this.handleDoubleClick} className="close">X</div>
+          </div>
+          <div className="formgroup">
+            <label htmlFor="edit-author"> Author:
+              <input name="edit-author" value={author} onChange={this.onChange} type="text" id="edit-author" />
+            </label>
+          </div>
+          <div className="formgroup">
+            <label htmlFor="edit-bio"> Bio:
+              <textarea className="edit-bio" name="edit-bio" value={bio} onChange={this.onChange} />
+            </label>
+          </div>
+          <div className="formgroup">
+            <input className="button" name="edit-submit" type="submit" value="Submit" />
+          </div>
+        </EditAuthor>
+      </CreateArticleWrapper>
     )
   }
 }
 
-const AddFormWrapper = styled.div `
+const CreateArticleWrapper = styled.div `
   textarea {
     height: 10em;
   }
