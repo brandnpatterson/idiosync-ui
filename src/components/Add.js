@@ -4,7 +4,6 @@ import axios from 'axios'
 import styled from 'styled-components'
 
 import CreateArticle from './themes/Form'
-import CreateAuthor from './themes/Form'
 import EditAuthor from './themes/Form'
 import NotFound from './NotFound'
 
@@ -24,12 +23,14 @@ class Add extends Component {
       doubleClicked: false,
       newAuthorSelect: false
     }
-  }
+}
 
   onChange = (e) => {
     this.handleButtonSettings(e)
 
     this.setState( {[e.target.name]: e.target.value} )
+
+    console.log(this.state)
   }
 
   handleButtonSettings = (e) => {
@@ -63,9 +64,15 @@ class Add extends Component {
     }
   }
 
-  postRequest = (e) => {
+  postArticle = (e) => {
     e.preventDefault()
-    const {  title, author, bio, content, tag_list } = this.state
+    const {
+      author,
+      bio,
+      content,
+      tag_list,
+      title
+    } = this.state
     const { authors, getRequest } = this.props
     const articlesObj = {
       title,
@@ -101,7 +108,7 @@ class Add extends Component {
     })
   }
 
-  putRequest = () => {
+  editAuthor = () => {
     const { author, bio, getRequest, id } = this.state
     const authorsObj = {
       name: author,
@@ -111,12 +118,11 @@ class Add extends Component {
     axios.put(`${reqAuthors}/${id}`, authorsObj)
       .then(() => {
         getRequest()
-        console.log(authorsObj)
       })
       .catch(err => console.log(err))
   }
 
-  toggleAuthorSelect = (e) => {
+  toggleAuthorSelectView = (e) => {
     this.setState({
       author: '',
       bio: ''
@@ -162,9 +168,8 @@ class Add extends Component {
         ? <CreateArticle
             className={
               doubleClicked === true ? 'hidden' : 'visible' && newAuthorSelect === true ? 'hidden' : 'visible'
-
             }
-            onSubmit={this.postRequest}
+            onSubmit={this.postArticle}
             method="post"
             autoComplete="off"
           >
@@ -186,13 +191,15 @@ class Add extends Component {
                 <input name="tag_list" value={tag_list} onChange={this.onChange} type="text" id="tag_list" />
               </label>
             </div>
+            <div className="formgroup">
+              <label htmlFor="author"> Author:
+                <input name="author" value={author} onChange={this.onChange} type="text" id="author" />
+              </label>
+            </div>
             <div className="author formgroup">
               <label htmlFor="author">
                 <div className={newAuthorSelect === false ? 'visible' : 'hidden'}>
-                  <div className="author-selection">
-                    <h2>Choose Author:</h2>
-                    <button type="button" onClick={this.toggleAuthorSelect}>Create New Author</button>
-                  </div>
+                  <h2>Choose Author:</h2>
                   {authorButtons}
                 </div>
               </label>
@@ -202,24 +209,9 @@ class Add extends Component {
             </div>
           </CreateArticle>
         : <NotFound />}
-        <CreateAuthor>
-          <div className={newAuthorSelect === true ? 'visible author formgroup' : 'hidden'}>
-            <div className="author-selection">
-              <h2>New Author:</h2>
-              <button type="button" onClick={this.toggleAuthorSelect}>Back to Authors</button>
-            </div>
-            <label htmlFor="edit-author"> Author:
-              <input name="author" value={author} onChange={this.onChange} type="text" id="author" />
-            </label>
-            <label htmlFor="bio"> Bio:
-              <textarea name="bio" value={bio} onChange={this.onChange} />
-            </label>
-            <input type="button" className="button create-new-author" name="create" value="Create" />
-          </div>
-        </CreateAuthor>
         <EditAuthor
           className={doubleClicked === true ? 'visible edit-form' : 'hidden'}
-          onSubmit={this.putRequest}
+          onSubmit={this.editAuthor}
           method="put"
           autoComplete="off"
         >
@@ -254,9 +246,6 @@ const CreateArticleWrapper = styled.div `
     display: flex;
     align-items: center;
     justify-content: space-around;
-  }
-  .author {
-    margin-top: 5em;
   }
   .active {
     color: blue;
