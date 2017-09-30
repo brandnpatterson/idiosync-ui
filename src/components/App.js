@@ -57,11 +57,12 @@ class App extends Component {
         const authors = res.data
         this.setState({ authors })
       })
+      .then(() => {
+        setTimeout(() => {
+          this.setTags()
+        }, 0)
+      })
       .catch(err => console.log(err))
-
-    setTimeout(() => {
-      this.setTags()
-    }, 500)
   }
 
   // set tags
@@ -154,7 +155,13 @@ class App extends Component {
   }
 
   render () {
-    const { authenticated, articles, authors, search, tags } = this.state
+    const {
+      articles,
+      authenticated,
+      authors,
+      search,
+      tags
+    } = this.state
 
     let filteredArticles = []
 
@@ -247,6 +254,7 @@ class App extends Component {
               return <Add
                 authenticated={authenticated}
                 authors={authors}
+                articles={articles}
                 getRequest={this.getRequest}
               />
             }} />
@@ -282,6 +290,11 @@ const AppWrapper = styled.div `
     font-size: 1em;
     height: 2em;
     width: 100%;
+  }
+  .button.button-delete {
+    background: red;
+    margin: 2em auto;
+    width: 25%;
   }
 `
 

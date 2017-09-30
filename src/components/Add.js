@@ -4,6 +4,7 @@ import axios from 'axios'
 import styled from 'styled-components'
 
 import CreateArticle from './themes/Form'
+import DeleteAuthor from './themes/Form'
 import EditAuthor from './themes/Form'
 import NotFound from './NotFound'
 
@@ -21,16 +22,39 @@ class Add extends Component {
       content: '',
       tag_list: '',
       doubleClicked: false,
-      newAuthorSelect: false
+      newAuthor: false
     }
-}
+  }
 
   onChange = (e) => {
+    if (e.target.dataset.active === 'false') {
+      this.handleActiveButton(e)
+      e.target.dataset.active = 'true'
+    }
     this.handleButtonSettings(e)
+    this.setState({
+      [e.target.name]: e.target.value
+    })
+  }
 
-    this.setState( {[e.target.name]: e.target.value} )
+  toggleNewAuthor = (e) => {
+    this.setState({
+      newAuthor: true,
+      author: ''
+    })
 
-    console.log(this.state)
+    this.handleActiveButton(e)
+  }
+
+  handleActiveButton = (e) => {
+    const buttonContainer = e.target.parentNode
+    const buttonChildren = buttonContainer.children
+
+    for (let i = 0; i < buttonChildren.length; i++) {
+      if (buttonChildren[i].dataset.active === 'true') {
+        buttonChildren[i].dataset.active = 'false'
+      }
+    }
   }
 
   handleButtonSettings = (e) => {
@@ -109,7 +133,12 @@ class Add extends Component {
   }
 
   editAuthor = () => {
-    const { author, bio, getRequest, id } = this.state
+    const {
+      author,
+      bio,
+      getRequest,
+      id
+    } = this.state
     const authorsObj = {
       name: author,
       id,
@@ -122,21 +151,17 @@ class Add extends Component {
       .catch(err => console.log(err))
   }
 
-  toggleAuthorSelectView = (e) => {
-    this.setState({
-      author: '',
-      bio: ''
-    })
+  deleteAuthor = () => {
+    const {
+      getRequest,
+      id
+    } = this.state
 
-    if (this.state.newAuthorSelect === false) {
-      this.setState({
-        newAuthorSelect: true
+    axios.delete(`${reqAuthors}/${id}`)
+      .then(() => {
+        getRequest()
       })
-    } else {
-      this.setState({
-        newAuthorSelect: false
-      })
-    }
+      .catch(err => console.log(err))
   }
 
   render () {
@@ -147,7 +172,7 @@ class Add extends Component {
       title,
       tag_list,
       doubleClicked,
-      newAuthorSelect
+      newAuthor
     } = this.state
     const { authors } = this.props
 
@@ -158,7 +183,9 @@ class Add extends Component {
         value={author}
         type="button"
         onDoubleClick={this.handleDoubleClick}
-        onClick={this.onChange} key={a.id}>{a.name}
+        onClick={this.onChange} key={a.id}
+      >
+        {a.name}
       </button>
     ))
 
@@ -166,9 +193,7 @@ class Add extends Component {
       <CreateArticleWrapper>
         {this.props.authenticated === true
         ? <CreateArticle
-            className={
-              doubleClicked === true ? 'hidden' : 'visible' && newAuthorSelect === true ? 'hidden' : 'visible'
-            }
+            className={ doubleClicked === true ? 'hidden' : 'visible' }
             onSubmit={this.postArticle}
             method="post"
             autoComplete="off"
@@ -186,25 +211,26 @@ class Add extends Component {
                 <textarea name="content" value={content} onChange={this.onChange} id="content" />
               </label>
             </div>
-            <div className="formgroup">
-              <label htmlFor="tag_list"> Tags:
+            <div className="tags formgroup">
+              <label htmlFor="tag_list"> Tags: (Seperate with commas)
                 <input name="tag_list" value={tag_list} onChange={this.onChange} type="text" id="tag_list" />
               </label>
             </div>
-            <div className="formgroup">
+            <div className={newAuthor === false ? 'hidden' : 'formgroup visible' }>
               <label htmlFor="author"> Author:
                 <input name="author" value={author} onChange={this.onChange} type="text" id="author" />
               </label>
             </div>
             <div className="author formgroup">
               <label htmlFor="author">
-                <div className={newAuthorSelect === false ? 'visible' : 'hidden'}>
+                <div>
                   <h2>Choose Author:</h2>
+                  <button onClick={this.toggleNewAuthor} type="button">New Author</button>
                   {authorButtons}
                 </div>
               </label>
             </div>
-            <div className={newAuthorSelect === false ? 'visible formgroup' : 'hidden'}>
+            <div>
               <input className="post-data button" name="submit" type="submit" value="Submit" />
             </div>
           </CreateArticle>
@@ -221,18 +247,27 @@ class Add extends Component {
           </div>
           <div className="formgroup">
             <label htmlFor="edit-author"> Author:
-              <input name="edit-author" value={author} onChange={this.onChange} type="text" id="edit-author" />
+              <input name="author" value={author} onChange={this.onChange} type="text" id="edit-author" />
             </label>
           </div>
           <div className="formgroup">
             <label htmlFor="edit-bio"> Bio:
-              <textarea className="edit-bio" name="edit-bio" value={bio} onChange={this.onChange} />
+              <textarea className="edit-bio" name="bio" value={bio} onChange={this.onChange} />
             </label>
           </div>
           <div className="formgroup">
             <input className="button" name="edit-submit" type="submit" value="Submit" />
           </div>
         </EditAuthor>
+        <DeleteAuthor
+          className={doubleClicked === true ? 'visible edit-form' : 'hidden'}
+          onSubmit={this.deleteAuthor}
+          method="delete"
+        >
+          <div className="formgroup">
+            <input className="button button-delete" name="author-delete" type="submit" value="Delete" />
+          </div>
+        </DeleteAuthor>
       </CreateArticleWrapper>
     )
   }
@@ -242,10 +277,11 @@ const CreateArticleWrapper = styled.div `
   textarea {
     height: 10em;
   }
-  .author-selection {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
+  .author,
+  .tags {
+    button {
+      margin: 1%;
+    }
   }
   .active {
     color: blue;
@@ -270,6 +306,9 @@ const CreateArticleWrapper = styled.div `
   .edit-bio {
     width: 100%;
     height: 10em;
+  }
+  button[data-active='true'] {
+    border-color: green;
   }
 `
 

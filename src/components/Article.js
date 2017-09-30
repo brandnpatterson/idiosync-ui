@@ -46,7 +46,7 @@ const Article = ({ article, articles, authors }) => {
         {
           authors.map(author => {
             if (author.name === article.author) {
-              return <h2>{author.bio}</h2>
+              return <h2 key={author.id}>{author.bio}</h2>
             } else {
               return null
             }

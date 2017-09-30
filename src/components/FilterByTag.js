@@ -1,5 +1,5 @@
 import React from 'react'
-import { bool, func  } from 'prop-types'
+import { array, object } from 'prop-types'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -43,8 +43,8 @@ const FilterByTag = ({ filterByTag, match }) => {
 }
 
 FilterByTag.propTypes = {
-  filterByTag: func.isRequired,
-  match: bool.isRequired
+  filterByTag: array.isRequired,
+  match: object.isRequired
 }
 
 // style
