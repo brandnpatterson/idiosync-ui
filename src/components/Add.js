@@ -108,7 +108,6 @@ class Add extends Component {
       name: author,
       bio
     }
-
     axios.post(reqArticles, articlesObj)
       .then(() => {
         getRequest()
