@@ -19,6 +19,7 @@ class AddArticle extends Component {
       title: '',
       id: '',
       author: '',
+      author_id: '',
       bio: '',
       content: '',
       tag_list: '',
@@ -28,6 +29,7 @@ class AddArticle extends Component {
   }
 
   onChange = (e) => {
+    console.log(this.state.author)
     if (e.target.dataset.active === 'false') {
       this.handleActiveButton(e)
       e.target.dataset.active = 'true'
@@ -125,7 +127,9 @@ class AddArticle extends Component {
   }
 
   postAuthor = (e) => {
-    e.preventDefault()
+    e.prevent.default()
+    window.location.reload()
+    
     const {
       author,
       bio
@@ -156,9 +160,10 @@ class AddArticle extends Component {
     const {
       author,
       bio,
-      getRequest,
       id
     } = this.state
+    const { getRequest } = this.props
+
     const authorsObj = {
       name: author,
       id,
@@ -247,7 +252,7 @@ class AddArticle extends Component {
               </label>
             </div>
             <div className="formgroup">
-              <input className="post-data button" name="submit" type="submit" value="Submit" />
+              <input className="post-data button" name="create-article" type="submit" value="Submit" />
             </div>
           </CreateArticle>
         : <NotFound />}
@@ -256,7 +261,7 @@ class AddArticle extends Component {
         <CreateAuthor
           className={ newAuthor === false ? 'hidden' : 'visible' }
           onSubmit={this.postAuthor}
-          method="post"
+          method="get"
           autoComplete="off"
         >
           <div className="formgroup">
@@ -271,7 +276,7 @@ class AddArticle extends Component {
             </label>
           </div>
           <div className="formgroup">
-            <input className="button" name="submit" type="submit" value="Submit" />
+            <input className="button" name="create-author" type="submit" value="Submit" />
           </div>
         </CreateAuthor>
 
@@ -297,7 +302,7 @@ class AddArticle extends Component {
             </label>
           </div>
           <div className="formgroup">
-            <input className="button" name="edit-submit" type="submit" value="Submit" />
+            <input className="button" name="edit-author" type="submit" value="Submit" />
           </div>
         </EditAuthor>
 
@@ -308,7 +313,7 @@ class AddArticle extends Component {
           method="delete"
         >
           <div className="formgroup">
-            <input className="button button-delete" name="author-delete" type="submit" value="Delete" />
+            <input className="button button-delete" name="delete-author" type="submit" value="Delete" />
           </div>
         </DeleteAuthor>
       </CreateArticleWrapper>
