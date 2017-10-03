@@ -220,6 +220,7 @@ class App extends Component {
             <Route path="/tags/:tagName" render={({ match }) => {
               return (
                 <FilterByTag
+                  authors={authors}
                   match={match}
                   tags={tags}
                   filterByTag={

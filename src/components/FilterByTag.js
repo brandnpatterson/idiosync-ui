@@ -3,7 +3,7 @@ import { array, object } from 'prop-types'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
-const FilterByTag = ({ filterByTag, match }) => {
+const FilterByTag = ({ authors, filterByTag, match }) => {
 
   const filteredArticles = []
 
@@ -28,7 +28,9 @@ const FilterByTag = ({ filterByTag, match }) => {
             filteredArticles.map(article => (
               <ul key={article.id}>
                 <li className="author">
-                  {article.author_id}
+                  { authors.map(author => {
+                    return author.id === article.author_id ? author.name : ''
+                  })}
                 </li>
                 <li className="title">
                   <Link to={`/articles/${article.id}`}>{article.title}</Link>
