@@ -8,14 +8,12 @@ const Article = ({ article, articles, authors }) => {
 
   const tags = article.tags
 
-  console.log(authors)
-
   return (
     <ArticleWrapper>
       <header>
         <div>
           <h2>{article.title}</h2>
-          <h3>{article.author}</h3>
+          <h3>{article.author_id}</h3>
         </div>
         <div>
           <Link to={

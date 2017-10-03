@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 import { array } from 'prop-types'
 import styled from 'styled-components'
 
-const Home = ({ articles }) => {
-  
+const Home = ({ articles, authors }) => {
+
   return (
     <HomeWrapper>
       <div className="outer">
@@ -16,7 +16,7 @@ const Home = ({ articles }) => {
             articles.map(article => (
               <ul key={article.id}>
                 <li className="author">
-                  {article.author}
+                  {article.author_id}
                 </li>
                 <li className="title">
                   <Link to={`/articles/${article.id}`}>{article.title}</Link>

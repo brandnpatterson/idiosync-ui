@@ -32,7 +32,7 @@ class AddArticle extends Component {
       this.handleActiveButton(e)
       e.target.dataset.active = 'true'
     }
-    // this.shareActiveButtonWithInput(e)
+    this.handleEditAndDeleteAuthor(e)
     this.setState({
       [e.target.name]: e.target.value
     })
@@ -49,24 +49,24 @@ class AddArticle extends Component {
     }
   }
 
-  // shareActiveButtonWithInput = (e) => {
-  //   const { authors } = this.props
-  //
-  //   if (e.target.type === 'button') {
-  //     e.target.value = e.target.innerHTML
-  //
-  //     authors.map(author => {
-  //       if (author.name === e.target.innerHTML) {
-  //         return this.setState({
-  //           id: author.id,
-  //           bio: author.bio
-  //         })
-  //       } else {
-  //         return null
-  //       }
-  //     })
-  //   }
-  // }
+  handleEditAndDeleteAuthor = (e) => {
+    const { authors } = this.props
+
+    if (e.target.type === 'button') {
+      e.target.value = e.target.innerHTML
+
+      authors.map(author => {
+        if (author.name === e.target.innerHTML) {
+          return this.setState({
+            id: author.id,
+            bio: author.bio
+          })
+        } else {
+          return null
+        }
+      })
+    }
+  }
 
   handleDoubleClick = () => {
     if (this.state.doubleClicked === false) {
@@ -195,7 +195,6 @@ class AddArticle extends Component {
       doubleClicked
     } = this.state
     const { authors } = this.props
-    console.log(authors)
 
     const authorButtons = authors.map(a => (
       <button

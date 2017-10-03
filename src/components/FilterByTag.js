@@ -28,7 +28,7 @@ const FilterByTag = ({ filterByTag, match }) => {
             filteredArticles.map(article => (
               <ul key={article.id}>
                 <li className="author">
-                  {article.author}
+                  {article.author_id}
                 </li>
                 <li className="title">
                   <Link to={`/articles/${article.id}`}>{article.title}</Link>

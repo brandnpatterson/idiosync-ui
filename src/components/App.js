@@ -194,7 +194,7 @@ class App extends Component {
           { /* Articles */ }
           {articles && (
             <Route exact path="/articles" render={() => {
-              return <Home articles={articles} />
+              return <Home articles={articles} authors={authors} />
             }} />
           )}
           { /* Articles/:id */ }
@@ -254,6 +254,7 @@ class App extends Component {
               return <AddArticle
                 authenticated={authenticated}
                 authors={authors}
+                articles={articles}
                 getRequest={this.getRequest}
               />
             }} />
