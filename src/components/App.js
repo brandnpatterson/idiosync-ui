@@ -4,7 +4,7 @@ import axios from 'axios'
 import styled from 'styled-components'
 
 import About from './About'
-import Add from './Add'
+import AddArticle from './AddArticle'
 import FilterByTag from './FilterByTag'
 import Home from './Home'
 import Header from './Header'
@@ -251,10 +251,9 @@ class App extends Component {
           <Route exact path="/about" component={About} />
           {authors && (
             <Route exact path="/add" render={() => {
-              return <Add
+              return <AddArticle
                 authenticated={authenticated}
                 authors={authors}
-                articles={articles}
                 getRequest={this.getRequest}
               />
             }} />

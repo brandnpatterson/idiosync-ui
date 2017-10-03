@@ -4,6 +4,7 @@ import axios from 'axios'
 import styled from 'styled-components'
 
 import CreateArticle from './themes/Form'
+import CreateAuthor from './themes/Form'
 import DeleteAuthor from './themes/Form'
 import EditAuthor from './themes/Form'
 import NotFound from './NotFound'
@@ -11,7 +12,7 @@ import NotFound from './NotFound'
 const reqArticles = 'http://localhost:3000/api/v1/articles'
 const reqAuthors = 'http://localhost:3000/api/v1/authors'
 
-class Add extends Component {
+class AddArticle extends Component {
   constructor () {
     super()
     this.state = {
@@ -31,19 +32,10 @@ class Add extends Component {
       this.handleActiveButton(e)
       e.target.dataset.active = 'true'
     }
-    this.handleButtonSettings(e)
+    // this.shareActiveButtonWithInput(e)
     this.setState({
       [e.target.name]: e.target.value
     })
-  }
-
-  toggleNewAuthor = (e) => {
-    this.setState({
-      newAuthor: true,
-      author: ''
-    })
-
-    this.handleActiveButton(e)
   }
 
   handleActiveButton = (e) => {
@@ -57,24 +49,24 @@ class Add extends Component {
     }
   }
 
-  handleButtonSettings = (e) => {
-    const { authors } = this.props
-
-    if (e.target.type === 'button') {
-      e.target.value = e.target.innerHTML
-
-      authors.map(author => {
-        if (author.name === e.target.innerHTML) {
-          return this.setState({
-            id: author.id,
-            bio: author.bio
-          })
-        } else {
-          return null
-        }
-      })
-    }
-  }
+  // shareActiveButtonWithInput = (e) => {
+  //   const { authors } = this.props
+  //
+  //   if (e.target.type === 'button') {
+  //     e.target.value = e.target.innerHTML
+  //
+  //     authors.map(author => {
+  //       if (author.name === e.target.innerHTML) {
+  //         return this.setState({
+  //           id: author.id,
+  //           bio: author.bio
+  //         })
+  //       } else {
+  //         return null
+  //       }
+  //     })
+  //   }
+  // }
 
   handleDoubleClick = () => {
     if (this.state.doubleClicked === false) {
@@ -88,46 +80,75 @@ class Add extends Component {
     }
   }
 
+  toggleNewAuthor = (e) => {
+    this.setState({
+      newAuthor: true,
+      author: ''
+    })
+
+    this.handleActiveButton(e)
+  }
+
   postArticle = (e) => {
     e.preventDefault()
     const {
       author,
-      bio,
       content,
       tag_list,
       title
     } = this.state
-    const { authors, getRequest } = this.props
+
+    const {
+      getRequest
+    } = this.props
+
     const articlesObj = {
       title,
       author,
       content,
       tag_list
     }
-    const authorsObj = {
-      name: author,
-      bio
-    }
+
     axios.post(reqArticles, articlesObj)
       .then(() => {
         getRequest()
       })
       .catch(err => console.log(err))
 
-    const found = authors.some(a => a.name === authorsObj.name)
-    if (!found) {
-      axios.post(reqAuthors, authorsObj)
-        .then(() => {
-          getRequest()
-        })
-        .catch(err => console.log(err))
-    }
     this.setState({
       title: '',
       author: '',
       bio: '',
       content: '',
       tag_list: ''
+    })
+  }
+
+  postAuthor = (e) => {
+    e.preventDefault()
+    const {
+      author,
+      bio
+    } = this.state
+
+    const {
+      getRequest
+    } = this.props
+
+    const authorsObj = {
+      name: author,
+      bio
+    }
+
+    axios.post(reqAuthors, authorsObj)
+      .then(() => {
+        getRequest()
+      })
+      .catch(err => console.log(err))
+
+    this.setState({
+      author: '',
+      bio: ''
     })
   }
 
@@ -168,12 +189,13 @@ class Add extends Component {
       author,
       bio,
       content,
+      newAuthor,
       title,
       tag_list,
-      doubleClicked,
-      newAuthor
+      doubleClicked
     } = this.state
     const { authors } = this.props
+    console.log(authors)
 
     const authorButtons = authors.map(a => (
       <button
@@ -191,8 +213,9 @@ class Add extends Component {
     return (
       <CreateArticleWrapper>
         {this.props.authenticated === true
+          /* Create Article */
         ? <CreateArticle
-            className={ doubleClicked === true ? 'hidden' : 'visible' }
+            className={ doubleClicked === true ? 'hidden' : 'visible' && newAuthor === false ? 'visible' : 'hidden' }
             onSubmit={this.postArticle}
             method="post"
             autoComplete="off"
@@ -215,13 +238,8 @@ class Add extends Component {
                 <input name="tag_list" value={tag_list} onChange={this.onChange} type="text" id="tag_list" />
               </label>
             </div>
-            <div className={newAuthor === false ? 'hidden' : 'formgroup visible' }>
-              <label htmlFor="author"> Author:
-                <input name="author" value={author} onChange={this.onChange} type="text" id="author" />
-              </label>
-            </div>
-            <div className="author formgroup">
-              <label htmlFor="author">
+            <div className="chooseAuthor formgroup">
+              <label htmlFor="chooseAuthor">
                 <div>
                   <h2>Choose Author:</h2>
                   <button onClick={this.toggleNewAuthor} type="button">New Author</button>
@@ -229,11 +247,36 @@ class Add extends Component {
                 </div>
               </label>
             </div>
-            <div>
+            <div className="formgroup">
               <input className="post-data button" name="submit" type="submit" value="Submit" />
             </div>
           </CreateArticle>
         : <NotFound />}
+
+        {/* Create Author */}
+        <CreateAuthor
+          className={ newAuthor === false ? 'hidden' : 'visible' }
+          onSubmit={this.postAuthor}
+          method="post"
+          autoComplete="off"
+        >
+          <div className="formgroup">
+            <h2>New Author</h2>
+          </div>
+          <div className="formgroup">
+            <label htmlFor="create-author"> Name:
+              <input name="author" value={author} onChange={this.onChange} type="text" id="create-author" />
+            </label>
+            <label htmlFor="bio"> Bio:
+              <textarea name="bio" value={bio} onChange={this.onChange} id="bio" />
+            </label>
+          </div>
+          <div className="formgroup">
+            <input className="button" name="submit" type="submit" value="Submit" />
+          </div>
+        </CreateAuthor>
+
+        {/* Edit Author */}
         <EditAuthor
           className={doubleClicked === true ? 'visible edit-form' : 'hidden'}
           onSubmit={this.editAuthor}
@@ -258,6 +301,8 @@ class Add extends Component {
             <input className="button" name="edit-submit" type="submit" value="Submit" />
           </div>
         </EditAuthor>
+
+        {/* Delete Author */}
         <DeleteAuthor
           className={doubleClicked === true ? 'visible edit-form' : 'hidden'}
           onSubmit={this.deleteAuthor}
@@ -276,7 +321,7 @@ const CreateArticleWrapper = styled.div `
   textarea {
     height: 10em;
   }
-  .author,
+  .chooseAuthor,
   .tags {
     button {
       margin: 1%;
@@ -311,10 +356,10 @@ const CreateArticleWrapper = styled.div `
   }
 `
 
-Add.propType = {
+AddArticle.propType = {
   authenticated: bool.isRequired,
   authors: array.isRequired,
   getRequest: func.isRequred
 }
 
-export default Add
+export default AddArticle
