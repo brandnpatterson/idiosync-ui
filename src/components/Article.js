@@ -13,7 +13,15 @@ const Article = ({ article, articles, authors }) => {
       <header>
         <div>
           <h2>{article.title}</h2>
-          <h3>{article.author_id}</h3>
+          {
+            authors.map(author => {
+              if (author.id === article.author_id) {
+                return <h3 key={author.id}>{author.name}</h3>
+              } else {
+                return null
+              }
+            })
+          }
         </div>
         <div>
           <Link to={
@@ -43,7 +51,7 @@ const Article = ({ article, articles, authors }) => {
       <ul>
         {
           authors.map(author => {
-            if (author.name === article.author) {
+            if (author.id === article.author_id) {
               return <h2 key={author.id}>{author.bio}</h2>
             } else {
               return null
