@@ -24,7 +24,8 @@ const Header = ({ authenticated, filteredArticles, logout, search, updateSearch 
       {
         authenticated === true
         ? <ul className="right">
-            <li><Link to="/add">Add</Link></li>
+          <li><Link to="/new-article">New Article</Link></li>
+            <li><Link to="/new-author">New Author</Link></li>
             <li onClick={logout}><Link to="/">Log Out</Link></li>
           </ul>
         : <ul className="right">
@@ -43,7 +44,6 @@ Header.propTypes = {
   updateSearch: func.isRequired
 }
 
-// style
 const Nav = styled.nav `
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1), 0 5px 10px rgba(0, 0, 0, 0.05);
   display: flex;
@@ -59,7 +59,7 @@ const Nav = styled.nav `
   }
   .right {
     justify-content: space-around;
-    max-width: 15em;
+    max-width: 25em;
   }
   ul {
     display: flex;

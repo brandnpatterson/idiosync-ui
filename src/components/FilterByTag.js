@@ -49,7 +49,6 @@ FilterByTag.propTypes = {
   match: object.isRequired
 }
 
-// style
 const FilterByTagWrapper = styled.div `
   background: whitesmoke;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1), 0 5px 10px rgba(0, 0, 0, 0.05);

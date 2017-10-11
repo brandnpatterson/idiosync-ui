@@ -36,7 +36,6 @@ Search.propTypes = {
   updateSearch: func.isRequired
 }
 
-// style
 const SearchInput = styled.div `
   display: flex;
   align-items: center;

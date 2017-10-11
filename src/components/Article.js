@@ -69,7 +69,6 @@ Article.propTypes = {
   authors: array.isRequired
 }
 
-// style
 const ArticleWrapper = styled.div`
   margin: 0 auto;
   width: 70%;

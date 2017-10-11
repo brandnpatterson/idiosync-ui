@@ -37,7 +37,6 @@ const Login = ({ email, login, password, updateEmail, updatePassword }) => {
   )
 }
 
-// style
 Login.propTypes = {
   email: string.isRequired,
   login: func.isRequired,

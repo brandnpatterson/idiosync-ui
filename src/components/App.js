@@ -4,7 +4,8 @@ import axios from 'axios'
 import styled from 'styled-components'
 
 import About from './About'
-import AddArticle from './AddArticle'
+import NewArticle from './NewArticle'
+import NewAuthor from './NewAuthor'
 import FilterByTag from './FilterByTag'
 import Home from './Home'
 import Header from './Header'
@@ -16,8 +17,8 @@ import Tags from './Tags'
 const landingImg = 'images/landing.jpg'
 
 const reqArticles = 'http://localhost:3000/api/v1/articles'
-const reqSession = 'http://localhost:3000/api/v1/sessions'
 const reqAuthors = 'http://localhost:3000/api/v1/authors'
+const reqSession = 'http://localhost:3000/api/v1/sessions'
 
 class App extends Component {
   constructor () {
@@ -36,7 +37,6 @@ class App extends Component {
   componentWillMount () {
     this.getRequest()
     let localAuth = localStorage.getItem('authenticated')
-
     if (localAuth === 'true') {
       this.setState({
         authenticated: true
@@ -44,7 +44,6 @@ class App extends Component {
     }
   }
 
-  // get articles
   getRequest = () => {
     axios.get(reqArticles)
       .then(res => {
@@ -65,10 +64,8 @@ class App extends Component {
       .catch(err => console.log(err))
   }
 
-  // set tags
   setTags = () => {
     const { articles, tags } = this.state
-
     // access each article.tags to be used in tags state
     if (articles) {
       articles.forEach(article => {
@@ -93,12 +90,9 @@ class App extends Component {
     }
   }
 
-  // authentication
   login = (e) => {
     e.preventDefault()
-
     const { email, password } = this.state
-
     axios.post(reqSession, {
       email: email,
       password: password
@@ -248,11 +242,9 @@ class App extends Component {
               updatePassword={this.updatePassword}
             />
           }} />
-          { /* Static Routes */ }
-          <Route exact path="/about" component={About} />
           {authors && (
-            <Route exact path="/add" render={() => {
-              return <AddArticle
+            <Route exact path="/new-article" render={() => {
+              return <NewArticle
                 authenticated={authenticated}
                 authors={authors}
                 articles={articles}
@@ -260,6 +252,17 @@ class App extends Component {
               />
             }} />
           )}
+          {authors && (
+            <Route exact path="/new-author" render={() => {
+              return <NewAuthor
+                authenticated={authenticated}
+                authors={authors}
+                articles={articles}
+                getRequest={this.getRequest}
+              />
+            }} />
+          )}
+          <Route exact path="/about" component={About} />
           {articles && authors && (
             <Route component={NotFound} />
           )}
@@ -269,7 +272,6 @@ class App extends Component {
   }
 }
 
-// style
 const Background = styled.img `
   width: 100%;
 `
