@@ -15,13 +15,13 @@ const Search = ({  filteredArticles, search, updateSearch }) => {
         value={search}
       />
       <ul className="search__result">
-        {filteredArticles.map(article => (
+        {filteredArticles.map((article, index) => (
           <Link
             className={"search__result--item" + (search === '' ? " hidden" : '')}
-            key={article.id}
+            key={index}
             to={`/articles/${article.id}`}
           >
-            <li>{ article.title }</li>
+            <li>{article.title}</li>
           </Link>
         ))}
       </ul>

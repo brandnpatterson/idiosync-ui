@@ -14,9 +14,9 @@ const Article = ({ article, articles, authors }) => {
         <div>
           <h2>{article.title}</h2>
           {
-            authors.map(author => {
+            authors.map((author, index) => {
               if (author.id === article.author_id) {
-                return <h3 key={author.id}>{author.name}</h3>
+                return <h3 key={index}>{author.name}</h3>
               } else {
                 return null
               }
@@ -43,16 +43,16 @@ const Article = ({ article, articles, authors }) => {
       <p>{article.content}</p>
       <ul>
         {
-          tags.map(tag => {
-            return <Link className="tags" key={tag.id} to={`/tags/${tag.name}`}><li>{tag.name}</li></Link>
+          tags.map((tag, index) => {
+            return <Link className="tags" key={index} to={`/tags/${tag.name}`}><li>{tag.name}</li></Link>
           })
         }
       </ul>
       <ul>
         {
-          authors.map(author => {
+          authors.map((author, index) => {
             if (author.id === article.author_id) {
-              return <h2 key={author.id}>{author.bio}</h2>
+              return <h2 key={index}>{author.bio}</h2>
             } else {
               return null
             }

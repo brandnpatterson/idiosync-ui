@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { array, bool, func } from 'prop-types'
+import { Link } from 'react-router-dom'
 import MdEdit from 'react-icons/lib/md/edit'
 import axios from 'axios'
 import styled from 'styled-components'
@@ -15,50 +16,30 @@ class NewArticle extends Component {
     this.state = {
       title: '',
       content: '',
-      author: '',
       author_id: '',
       tag_list: ''
     }
   }
 
   onChange = (e) => {
-    if (e.target.dataset.active === 'false') {
-      this.handleActiveButton(e)
-      e.target.dataset.active = 'true'
-    }
-    this.handleAuthors(e)
     this.setState({
       [e.target.name]: e.target.value
     })
   }
 
-  handleActiveButton = (e) => {
-    const buttonContainer = e.target.parentNode
-    const buttonChildren = buttonContainer.children
-
-    for (let i = 0; i < buttonChildren.length; i++) {
-      if (buttonChildren[i].dataset.active === 'true') {
-        buttonChildren[i].dataset.active = 'false'
-      }
-    }
-  }
-
   postArticle = (e) => {
     e.preventDefault()
-
     const articleObj = {
       title: this.state.title,
       content: this.state.content,
       author_id: this.state.author_id,
       tag_list: this.state.tag_list
     }
-
     axios.post(req, articleObj)
       .then(() => {
         this.props.getRequest()
       })
       .catch(err => console.log(err))
-
     this.setState({
       title: '',
       content: '',
@@ -67,48 +48,38 @@ class NewArticle extends Component {
     })
   }
 
-  handleAuthors = (e) => {
-    const { authors } = this.props
-
-    if (e.target.type === 'button') {
-      e.target.value = e.target.innerHTML
-
-      authors.map(author => {
-        if (author.name === e.target.innerHTML) {
-          return this.setState({
-            author_id: author.id,
-            bio: author.bio
-          })
-        } else {
-          return null
-        }
-      })
-    }
+  setActiveTab = (id) => {
+    this.setState({
+      author_id: id
+    })
   }
 
   render () {
-    let {
+    const {
       title,
       content,
-      author,
+      author_id,
       tag_list
     } = this.state
     const { authors } = this.props
 
-    const authorButtons = authors.map(a => (
+    const authorButtons = authors.map((a, index) => (
       <div className="author-button"
-        onClick={this.onChange}
-        key={a.id}
+        data-active="false"
+        key={index}
         >
         <button
-          data-active="false"
+          onClick={() => this.setActiveTab(a.id)}
+          className={author_id === a.id ? 'active' : ''}
           name="author"
-          value={author}
+          value={a.name}
           type="button"
         >
           {a.name}
         </button>
-        <MdEdit />
+        <Link to={`authors/edit/${a.id}`}>
+          <MdEdit />
+        </Link>
       </div>
     ))
 
@@ -125,17 +96,17 @@ class NewArticle extends Component {
             </div>
             <div className="formgroup">
               <label htmlFor="title"> Title:
-                <input name="title" value={title} onChange={this.onChange} type="text" id="title" autoFocus />
+                <input name="title" value={title} onChange={this.onChange} type="text" autoFocus />
               </label>
             </div>
             <div className="formgroup">
               <label htmlFor="content"> Content:
-                <textarea name="content" value={content} onChange={this.onChange} id="content" />
+                <textarea name="content" value={content} onChange={this.onChange} />
               </label>
             </div>
             <div className="tag_list formgroup">
               <label htmlFor="tag_list"> Tags: (Seperate with commas)
-                <input name="tag_list" value={tag_list} onChange={this.onChange} type="text" id="tag_list" />
+                <input name="tag_list" value={tag_list} onChange={this.onChange} type="text" />
               </label>
             </div>
             <div className="formgroup">
@@ -166,13 +137,19 @@ NewArticle.propType = {
 }
 
 const NewArticleWrapper = styled.div `
+  .hidden {
+    display: none;
+  }
+  .visible {
+    display: block;
+  }
   textarea {
     height: 10em;
   }
   .form-group {
     margin: 20px 0;
   }
-  button[data-active='true'] {
+  .active {
     border-color: green;
   }
   .authors-button-wrapper {
@@ -187,7 +164,6 @@ const NewArticleWrapper = styled.div `
       }
       svg {
         color: gray;
-        cursor: pointer;
         margin: 14px;
       }
     }

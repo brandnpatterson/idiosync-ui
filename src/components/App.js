@@ -4,6 +4,7 @@ import axios from 'axios'
 import styled from 'styled-components'
 
 import About from './About'
+import EditAuthor from './EditAuthor'
 import NewArticle from './NewArticle'
 import NewAuthor from './NewAuthor'
 import FilterByTag from './FilterByTag'
@@ -25,7 +26,7 @@ class App extends Component {
     super()
     this.state = {
       articles: null,
-      authenticated: false,
+      authenticated: true,
       authors: null,
       email: '',
       password: '',
@@ -242,7 +243,7 @@ class App extends Component {
               updatePassword={this.updatePassword}
             />
           }} />
-          {authors && (
+          {articles && authors && (
             <Route exact path="/new-article" render={() => {
               return <NewArticle
                 authenticated={authenticated}
@@ -260,6 +261,13 @@ class App extends Component {
                 articles={articles}
                 getRequest={this.getRequest}
               />
+            }} />
+          )}
+          {authors && (
+            <Route path="/authors/edit/:id" render={({ match }) => {
+              return (
+                <EditAuthor author={authors.find(a => a.id === parseInt(match.params.id, 10))} />
+              )
             }} />
           )}
           <Route exact path="/about" component={About} />

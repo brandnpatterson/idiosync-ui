@@ -13,8 +13,8 @@ const Home = ({ articles, authors }) => {
           <h2>Articles</h2>
           <hr />
           {
-            articles.map(article => (
-              <ul key={article.id}>
+            articles.map((article, index) => (
+              <ul key={index}>
                 <li className="author">
                   { authors.map(author => {
                     return author.id === article.author_id ? author.name : ''
