@@ -243,13 +243,14 @@ class App extends Component {
               updatePassword={this.updatePassword}
             />
           }} />
-          {articles && authors && (
+          {articles && authors && tags && (
             <Route exact path="/new-article" render={() => {
               return <NewArticle
                 authenticated={authenticated}
                 authors={authors}
                 articles={articles}
                 getRequest={this.getRequest}
+                tags={tags}
               />
             }} />
           )}

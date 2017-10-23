@@ -52,7 +52,6 @@ class EditAuthor extends Component {
         this.setState({
           fireRedirect: true
         })
-        console.log(this.state.fireRedirect);
       })
       .catch(err => console.log(err))
   }

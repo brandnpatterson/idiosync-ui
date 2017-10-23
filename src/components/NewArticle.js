@@ -17,7 +17,8 @@ class NewArticle extends Component {
       title: '',
       content: '',
       author_id: '',
-      tag_list: ''
+      tag_list: '',
+      new_article: false
     }
   }
 
@@ -37,7 +38,8 @@ class NewArticle extends Component {
       title: this.state.title,
       content: this.state.content,
       author_id: this.state.author_id,
-      tag_list: this.state.tag_list
+      tag_list: this.state.tag_list,
+      new_article: this.state.new_article
     }
     axios.post(req, articleObj)
       .then(() => {
@@ -48,11 +50,13 @@ class NewArticle extends Component {
       title: '',
       content: '',
       author_id: '',
-      tag_list: ''
+      tag_list: '',
+      new_article: true
     })
+    window.scrollTo(0, 0)
   }
 
-  setActiveTab = (id) => {
+  setActiveAuthor = (id) => {
     this.setState({
       author_id: id
     })
@@ -63,28 +67,57 @@ class NewArticle extends Component {
       title,
       content,
       author_id,
-      tag_list
+      tag_list,
+      new_article
     } = this.state
-    const { authors } = this.props
+    const { authors, tags } = this.props
 
-    const authorButtons = authors.map((a, index) => (
-      <div className="author-button"
-        data-active="false"
-        key={index}
-        >
-        <button
-          onClick={() => this.setActiveTab(a.id)}
-          className={author_id === a.id ? 'active' : ''}
-          name="author"
-          value={a.name}
-          type="button"
-        >
-          {a.name}
-        </button>
-        <Link to={`authors/edit/${a.id}`}>
-          <MdEdit />
-        </Link>
-      </div>
+    const authorButtons = authors
+      .sort((a, b) => {
+        if (a.name < b.name) return -1
+        if (a.name > b.name) return 1
+        return 0
+      })
+      .map((a, index) => (
+        <div className="select-button"
+          key={index}
+          >
+          <button
+            onClick={() => this.setActiveAuthor(a.id)}
+            className={author_id === a.id ? 'active' : ''}
+            name="author"
+            value={a.name}
+            type="button"
+          >
+            {a.name}
+          </button>
+          <Link to={`authors/edit/${a.id}`}>
+            <MdEdit />
+          </Link>
+        </div>
+    ))
+
+    const tagsButtons = tags
+      .sort((a, b) => {
+        if (a.name < b.name) return -1
+        if (a.name > b.name) return 1
+        return 0
+      })
+      .map((a, index) => (
+        <div className="select-button"
+          key={index}
+          >
+          <button
+            name="author"
+            value={a.name}
+            type="button"
+          >
+            {a.name}
+          </button>
+          <Link to={`tags/edit/${a.id}`}>
+            <MdEdit />
+          </Link>
+        </div>
     ))
 
     return (
@@ -95,6 +128,9 @@ class NewArticle extends Component {
             method="post"
             autoComplete="off"
           >
+            {new_article && (
+              <div>New article created successfully!</div>
+            )}
             <div className="formgroup">
               <h2>New Article</h2>
             </div>
@@ -108,6 +144,16 @@ class NewArticle extends Component {
                 <textarea name="content" value={content} onChange={this.onChange} />
               </label>
             </div>
+            <div className="formgroup">
+              <label htmlFor="chooseAuthor">
+                <div>
+                  <h2>Choose Tags:</h2>
+                  <div className="select-buttons-wrapper">
+                    {tagsButtons}
+                  </div>
+                </div>
+              </label>
+            </div>
             <div className="tag_list formgroup">
               <label htmlFor="tag_list"> Tags: (Seperate with commas)
                 <input name="tag_list" value={tag_list} onChange={this.onChange} type="text" />
@@ -117,7 +163,7 @@ class NewArticle extends Component {
               <label htmlFor="chooseAuthor">
                 <div>
                   <h2>Choose Author:</h2>
-                  <div className="authors-button-wrapper">
+                  <div className="select-buttons-wrapper">
                     {authorButtons}
                   </div>
                 </div>
@@ -156,8 +202,8 @@ const NewArticleWrapper = styled.div `
   .active {
     border-color: green;
   }
-  .authors-button-wrapper {
-    .author-button {
+  .select-buttons-wrapper {
+    .select-button {
       border: 1px solid whitesmoke;
       display: flex;
       justify-content: space-between;
