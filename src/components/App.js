@@ -264,6 +264,7 @@ class App extends Component {
               />
             }} />
           )}
+          { /* Edit Author by :id */ }
           {authors && (
             <Route path="/authors/edit/:id" render={({ match }) => {
               return (

@@ -66,6 +66,9 @@ class NewArticle extends Component {
     let data = e.target.dataset
     data.active === 'false' ? data.active = 'true' : data.active = 'false'
     e.target.classList.add('active')
+    this.setState({
+      tag_list: `${this.state.tag_list} ${e.target.value}, `
+    })
   }
 
   render () {
@@ -80,12 +83,15 @@ class NewArticle extends Component {
 
     const authorButtons = authors
       .sort((a, b) => {
-        if (a.name < b.name) return -1
-        if (a.name > b.name) return 1
+        const aUpper = a.name.toUpperCase()
+        const bUpper = b.name.toUpperCase()
+
+        if (aUpper < bUpper) return -1
+        if (aUpper > bUpper) return 1
         return 0
       })
       .map((a, index) => (
-        <div className="select-button"
+        <div className="author-button"
           key={index}
           >
           <button
@@ -105,26 +111,26 @@ class NewArticle extends Component {
 
     const tagsButtons = tags
       .sort((a, b) => {
-        if (a.name < b.name) return -1
-        if (a.name > b.name) return 1
+        const aUpper = a.name.toUpperCase()
+        const bUpper = b.name.toUpperCase()
+
+        if (aUpper < bUpper) return -1
+        if (aUpper > bUpper) return 1
         return 0
       })
-      .map((a, index) => (
-        <div className="select-button"
+      .map((t, index) => (
+        <div className="tag-button"
           key={index}
           >
           <button
             data-active="false"
             onClick={this.setActiveTags}
             name="author"
-            value={a.name}
+            value={t.name}
             type="button"
           >
-            {a.name}
+            {t.name}
           </button>
-          <Link to={`tags/edit/${a.id}`}>
-            <MdEdit />
-          </Link>
         </div>
     ))
 
@@ -153,10 +159,10 @@ class NewArticle extends Component {
               </label>
             </div>
             <div className="formgroup">
-              <label htmlFor="chooseAuthor">
+              <label htmlFor="chooseTags">
                 <div>
                   <h2>Choose Tags:</h2>
-                  <div className="select-buttons-wrapper">
+                  <div className="tag-buttons-wrapper">
                     {tagsButtons}
                   </div>
                 </div>
@@ -171,7 +177,7 @@ class NewArticle extends Component {
               <label htmlFor="chooseAuthor">
                 <div>
                   <h2>Choose Author:</h2>
-                  <div className="select-buttons-wrapper">
+                  <div className="author-buttons-wrapper">
                     {authorButtons}
                   </div>
                 </div>
@@ -210,8 +216,8 @@ const NewArticleWrapper = styled.div `
   .active {
     border-color: green;
   }
-  .select-buttons-wrapper {
-    .select-button {
+  .author-buttons-wrapper {
+    .author-button {
       border: 1px solid whitesmoke;
       display: flex;
       justify-content: space-between;
@@ -224,6 +230,16 @@ const NewArticleWrapper = styled.div `
         color: gray;
         margin: 14px;
       }
+    }
+  }
+  .tag-buttons-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 2em auto;
+    .tag-button {
+      margin: 0 1.5em 0 0;
     }
   }
 `
