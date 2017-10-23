@@ -13,12 +13,12 @@ class EditArticle extends Component {
     super()
     this.state = {
       id: '',
-      name: '',
+      title: '',
       content: '',
       fireRedirect: false
     }
   }
-
+  //
   onChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value
@@ -27,55 +27,60 @@ class EditArticle extends Component {
 
   componentWillMount () {
     const { article } = this.props
-    console.log(article)
     this.setState({
       id: article.id,
-      name: article.title,
+      title: article.title,
       content: article.content
     })
   }
 
-  editAuthor = (e) => {
-    e.preventDefault()
+  setStateAndProps = () => {
+    this.setState({
+      fireRedirect: true
+    })
+    this.props.getRequest()
+  }
 
+  editArticle = (e) => {
+    e.preventDefault()
     const {
       id,
-      name,
+      title,
       content
     } = this.state
 
     const articleObj = {
-      name,
+      title,
       content
     }
     axios.put(`${req}/${id}`, articleObj)
       .then(() => {
-        this.setState({
-          fireRedirect: true
-        })
-      })
-      .catch(err => console.log(err))
-  }
-
-  deleteAuthor = (e) => {
-    e.preventDefault()
-
-    this.props.deleteNotify()
-    axios.delete(`${req}/${this.state.id}`)
-      .then(() => {
-        this.setState({
-          fireRedirect: true
-        })
+        this.setStateAndProps()
+        this.props.updateFlashConfirmation()
       })
       .catch(err => console.log(err))
     setTimeout(() => {
-      this.props.deleteNotify()
+      this.props.updateFlashConfirmation()
+    }, 2000)
+  }
+
+  deleteArticle = (e) => {
+    e.preventDefault()
+
+    this.props.deleteFlashConfirmation()
+    axios.delete(`${req}/${this.state.id}`)
+      .then(() => {
+        this.setStateAndProps()
+      })
+      .catch(err => console.log(err))
+    setTimeout(() => {
+      this.props.deleteFlashConfirmation()
     }, 2000)
   }
 
   render () {
     const {
-      name,
+      title,
       content,
       fireRedirect
     } = this.state
@@ -84,7 +89,7 @@ class EditArticle extends Component {
     return (
       <EditArticleWrapper>
         <EditArticleForm
-          onSubmit={this.editAuthor}
+          onSubmit={this.editArticle}
           method="get"
           autoComplete="off"
         >
@@ -93,7 +98,7 @@ class EditArticle extends Component {
           </div>
           <div className="formgroup">
             <label htmlFor="create-article"> Title:
-              <input name="name" value={name} onChange={this.onChange} type="text" />
+              <input name="title" value={title} onChange={this.onChange} type="text" autoFocus />
             </label>
             <label htmlFor="content"> Content:
               <textarea name="content" value={content} onChange={this.onChange} />
@@ -104,12 +109,12 @@ class EditArticle extends Component {
           </div>
           {/* Redirect */}
           {fireRedirect && (
-            <Redirect to={from || '/new-article'} />
+            <Redirect to={from || '/articles'} />
           )}
         </EditArticleForm>
-        {/* Delete Author */}
+        {/* Delete Article */}
         <DeleteArticleForm
-          onSubmit={this.deleteAuthor}
+          onSubmit={this.deleteArticle}
           method="delete"
         >
           <div className="formgroup">

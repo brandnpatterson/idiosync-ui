@@ -14,11 +14,11 @@ class NewArticle extends Component {
   constructor () {
     super()
     this.state = {
-      title: '',
-      content: '',
       author_id: '',
+      content: '',
+      new_article: false,
       tag_list: '',
-      new_article: false
+      title: ''
     }
   }
 
@@ -49,6 +49,7 @@ class NewArticle extends Component {
       })
       .then(() => {
         window.scrollTo(0, 0)
+        this.props.getRequest()
       })
       .catch(err => console.log(err))
   }
@@ -61,11 +62,16 @@ class NewArticle extends Component {
 
   setActiveTags = (e) => {
     let data = e.target.dataset
-    data.active === 'false' ? data.active = 'true' : data.active = 'false'
-    e.target.classList.add('active')
-    this.setState({
-      tag_list: `${this.state.tag_list} ${e.target.value}, `
-    })
+    if (data.active === 'false') {
+       data.active = 'true'
+       this.setState({
+         tag_list: `${this.state.tag_list} ${e.target.value}, `
+       })
+    } else {
+      data.active = 'false'
+    }
+    e.target.classList.toggle('active')
+
   }
 
   render () {
@@ -76,7 +82,7 @@ class NewArticle extends Component {
       tag_list,
       new_article
     } = this.state
-    const { authors, tags, deleted_author } = this.props
+    const { authors, tags, flash_create, flash_delete, flash_update } = this.props
 
     const authorButtons = authors
       .sort((a, b) => {
@@ -140,10 +146,24 @@ class NewArticle extends Component {
             autoComplete="off"
           >
             {new_article && (
-              <div>Article created successfully!</div>
+              <div className="flash-message">
+                <h4>Article created successfully!</h4>
+              </div>
             )}
-            {deleted_author && (
-              <div>Author deleted successfully!</div>
+            {flash_create && (
+              <div className="flash-message">
+                <h4>Author created successfully!</h4>
+              </div>
+            )}
+            {flash_delete && (
+              <div className="flash-message">
+                <h4>Author deleted successfully!</h4>
+              </div>
+            )}
+            {flash_update && (
+              <div className="flash-message">
+                <h4>Author updated successfully!</h4>
+              </div>
             )}
             <div className="formgroup">
               <h2>New Article</h2>
@@ -208,6 +228,11 @@ const NewArticleWrapper = styled.div `
   }
   textarea {
     height: 10em;
+  }
+  .flash-message {
+    text-align: center;
+    border: 1px solid green;
+    border-radius: 10px;
   }
   .form-group {
     margin: 20px 0;

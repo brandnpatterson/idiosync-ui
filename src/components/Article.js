@@ -14,7 +14,9 @@ const Article = ({ article, articles, authors }) => {
         <div>
           <div className="title-wrapper">
             <h2>{article.title}</h2>
-            <MdEdit />
+            <Link to={`edit/${article.id_react}`}>
+              <MdEdit />
+            </Link>
           </div>
           {
             authors.map((author, index) => {

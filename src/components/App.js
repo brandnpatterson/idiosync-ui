@@ -29,7 +29,9 @@ class App extends Component {
       articles: null,
       authenticated: true,
       authors: null,
-      deleted_author: false,
+      flash_create: false,
+      flash_delete: false,
+      flash_update: false,
       email: '',
       password: '',
       search: '',
@@ -39,9 +41,6 @@ class App extends Component {
 
   componentWillMount () {
     this.getRequest()
-    setTimeout(() => {
-      this.setTags()
-    }, 200)
     let localAuth = localStorage.getItem('authenticated')
     if (localAuth === 'true') {
       this.setState({
@@ -61,6 +60,9 @@ class App extends Component {
       .then(res => {
         const authors = res.data
         this.setState({ authors })
+        setTimeout(() => {
+          this.setTags()
+        }, 200)
       })
       .catch(err => console.log(err))
   }
@@ -149,14 +151,38 @@ class App extends Component {
     })
   }
 
-  deleteNotify = () => {
-    if (this.state.deleted_author === false) {
+  createFlashConfirmation = () => {
+    if (this.state.flash_create === false) {
       this.setState({
-        deleted_author: true
+        flash_create: true
       })
     } else {
       this.setState({
-        deleted_author: false
+        flash_create: false
+      })
+    }
+  }
+
+  deleteFlashConfirmation = () => {
+    if (this.state.flash_delete === false) {
+      this.setState({
+        flash_delete: true
+      })
+    } else {
+      this.setState({
+        flash_delete: false
+      })
+    }
+  }
+
+  updateFlashConfirmation = () => {
+    if (this.state.flash_update === false) {
+      this.setState({
+        flash_update: true
+      })
+    } else {
+      this.setState({
+        flash_update: false
       })
     }
   }
@@ -176,7 +202,9 @@ class App extends Component {
       articles,
       authenticated,
       authors,
-      deleted_author,
+      flash_create,
+      flash_delete,
+      flash_update,
       search,
       tags
     } = this.state
@@ -216,7 +244,40 @@ class App extends Component {
           { /* Articles */ }
           {articles && (
             <Route exact path="/articles" render={() => {
-              return <Home articles={articles} authors={authors} />
+              return <Home
+                articles={articles}
+                authors={authors}
+                flash_delete={flash_delete}
+                flash_update={flash_update}
+              />
+            }} />
+          )}
+          { /* New Article */ }
+          {articles && authors && tags && (
+            <Route exact path="/new-article" render={() => {
+              return <NewArticle
+                authenticated={authenticated}
+                authors={authors}
+                articles={articles}
+                tags={tags}
+                flash_create={flash_create}
+                flash_delete={flash_delete}
+                flash_update={flash_update}
+                getRequest={this.getRequest}
+              />
+            }} />
+          )}
+          { /* Edit Article by :id */ }
+          {articles && (
+            <Route path="/articles/edit/:id" render={({ match }) => {
+              return (
+                <EditArticle
+                  article={articles.find(a => a.id_react === parseInt(match.params.id, 10))}
+                  deleteFlashConfirmation={this.deleteFlashConfirmation}
+                  updateFlashConfirmation={this.updateFlashConfirmation}
+                  getRequest={this.getRequest}
+                />
+              )
             }} />
           )}
           { /* Articles/:id */ }
@@ -231,13 +292,39 @@ class App extends Component {
               )
             }} />
           )}
+          { /* New Author */ }
+          {authors && (
+            <Route exact path="/new-author" render={() => {
+              return <NewAuthor
+                authenticated={authenticated}
+                authors={authors}
+                articles={articles}
+                createFlashConfirmation={this.createFlashConfirmation}
+                getRequest={this.getRequest}
+              />
+            }} />
+          )}
+          { /* Edit Author by :id */ }
+          {authors && (
+            <Route path="/authors/edit/:id" render={({ match }) => {
+              return (
+                <EditAuthor
+                  author={authors.find(a => a.id_react === parseInt(match.params.id, 10))}
+                  deleteAuthorNotify={this.deleteAuthorNotify}
+                  deleteFlashConfirmation={this.deleteFlashConfirmation}
+                  updateFlashConfirmation={this.updateFlashConfirmation}
+                  getRequest={this.getRequest}
+                />
+              )
+            }} />
+          )}
           { /* Tags */ }
           {articles && (
             <Route exact path="/tags" render={() => {
               return <Tags articles={articles} tags={tags} />
             }} />
           )}
-          { /* Tags/:id */ }
+          { /* Tags/:tagName */ }
           {articles && (
             <Route path="/tags/:tagName" render={({ match }) => {
               return (
@@ -270,50 +357,6 @@ class App extends Component {
               updatePassword={this.updatePassword}
             />
           }} />
-          { /* New Article */ }
-          {articles && authors && tags && (
-            <Route exact path="/new-article" render={() => {
-              return <NewArticle
-                authenticated={authenticated}
-                authors={authors}
-                articles={articles}
-                tags={tags}
-                deleted_author={deleted_author}
-              />
-            }} />
-          )}
-          { /* Edit Article by :id */ }
-          {articles && (
-            <Route path="/articles/edit/:id" render={({ match }) => {
-              return (
-                <EditArticle
-                  article={articles.find(a => a.id_react === parseInt(match.params.id, 10))}
-                />
-              )
-            }} />
-          )}
-          { /* New Author */ }
-          {authors && (
-            <Route exact path="/new-author" render={() => {
-              return <NewAuthor
-                authenticated={authenticated}
-                authors={authors}
-                articles={articles}
-              />
-            }} />
-          )}
-          { /* Edit Author by :id */ }
-          {authors && (
-            <Route path="/authors/edit/:id" render={({ match }) => {
-              return (
-                <EditAuthor
-                  author={authors.find(a => a.id_react === parseInt(match.params.id, 10))}
-                  deleteNotify={this.deleteNotify}
-                  deleted_author={deleted_author}
-                />
-              )
-            }} />
-          )}
           <Route exact path="/about" component={About} />
           {articles && authors && (
             <Route component={NotFound} />

@@ -34,6 +34,13 @@ class EditAuthor extends Component {
     })
   }
 
+  setStateAndProps = () => {
+    this.setState({
+      fireRedirect: true
+    })
+    this.props.getRequest()
+  }
+
   editAuthor = (e) => {
     e.preventDefault()
 
@@ -49,26 +56,26 @@ class EditAuthor extends Component {
     }
     axios.put(`${req}/${id}`, authorObj)
       .then(() => {
-        this.setState({
-          fireRedirect: true
-        })
+        this.setStateAndProps()
+        this.props.updateFlashConfirmation()
       })
       .catch(err => console.log(err))
+    setTimeout(() => {
+      this.props.updateFlashConfirmation()
+    }, 2000)
   }
 
   deleteAuthor = (e) => {
     e.preventDefault()
 
-    this.props.deleteNotify()
+    this.props.deleteFlashConfirmation()
     axios.delete(`${req}/${this.state.id}`)
       .then(() => {
-        this.setState({
-          fireRedirect: true
-        })
+        this.setStateAndProps()
       })
       .catch(err => console.log(err))
     setTimeout(() => {
-      this.props.deleteNotify()
+      this.props.deleteFlashConfirmation()
     }, 2000)
   }
 

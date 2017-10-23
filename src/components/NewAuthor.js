@@ -33,12 +33,19 @@ class NewAuthor extends Component {
     }
 
     axios.post(req, authorObj)
+      .then(() => {
+        this.setState({
+          name: '',
+          bio: '',
+          fireRedirect: true
+        })
+        this.props.getRequest()
+        this.props.createFlashConfirmation()
+      })
       .catch(err => console.log(err))
-    this.setState({
-      name: '',
-      bio: '',
-      fireRedirect: true
-    })
+    setTimeout(() => {
+      this.props.createFlashConfirmation()
+    }, 2000)
   }
 
   render () {
@@ -61,7 +68,7 @@ class NewAuthor extends Component {
           </div>
           <div className="formgroup">
             <label htmlFor="create-author"> Name:
-              <input name="name" value={name} onChange={this.onChange} type="text" />
+              <input name="name" value={name} onChange={this.onChange} type="text" autoFocus />
             </label>
             <label htmlFor="bio"> Bio:
               <textarea name="bio" value={bio} onChange={this.onChange} />

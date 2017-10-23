@@ -3,10 +3,20 @@ import { Link } from 'react-router-dom'
 import { array } from 'prop-types'
 import styled from 'styled-components'
 
-const Home = ({ articles, authors }) => {
+const Home = ({ articles, authors, flash_delete, flash_update }) => {
   return (
     <HomeWrapper>
       <div className="outer">
+        {flash_delete && (
+          <div className="flash-message">
+            <h4>Article deleted successfully!</h4>
+          </div>
+        )}
+        {flash_update && (
+          <div className="flash-message">
+            <h4>Article updated successfully!</h4>
+          </div>
+        )}
         <h2 className="title">IDIOSYNC</h2>
         <div className="inner">
           <h2>Articles</h2>
@@ -43,6 +53,11 @@ const HomeWrapper = styled.div `
   width: 80%;
   .outer {
     padding: 2em 0;
+    .flash-message {
+      text-align: center;
+      border: 1px solid green;
+      border-radius: 10px;
+    }
     h2.title {
       font-size: 2.3em;
       text-align: center;
