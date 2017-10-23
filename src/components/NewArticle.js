@@ -62,6 +62,12 @@ class NewArticle extends Component {
     })
   }
 
+  setActiveTags = (e) => {
+    let data = e.target.dataset
+    data.active === 'false' ? data.active = 'true' : data.active = 'false'
+    e.target.classList.add('active')
+  }
+
   render () {
     const {
       title,
@@ -108,6 +114,8 @@ class NewArticle extends Component {
           key={index}
           >
           <button
+            data-active="false"
+            onClick={this.setActiveTags}
             name="author"
             value={a.name}
             type="button"
