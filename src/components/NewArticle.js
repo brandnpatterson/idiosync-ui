@@ -21,6 +21,10 @@ class NewArticle extends Component {
     }
   }
 
+  componentWillMount () {
+    this.props.getRequest()
+  }
+
   onChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value
@@ -120,7 +124,7 @@ class NewArticle extends Component {
               </label>
             </div>
             <div className="formgroup">
-              <input className="post-data button" name="create-article" type="submit" value="Submit" />
+              <input className="post-data button" name="create-article" type="submit" value="Create Article" />
             </div>
           </NewArticleForm>
         : <NotFound />}

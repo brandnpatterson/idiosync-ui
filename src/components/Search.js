@@ -5,7 +5,6 @@ import MdSearch from 'react-icons/lib/md/search'
 import styled from 'styled-components'
 
 const Search = ({  filteredArticles, search, updateSearch }) => {
-
   return (
     <SearchInput autoComplete="off">
       <input className="search__input"

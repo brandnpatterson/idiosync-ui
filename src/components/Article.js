@@ -5,9 +5,7 @@ import styled from 'styled-components'
 
 const Article = ({ article, articles, authors }) => {
   const total = articles.length
-
   const tags = article.tags
-
   return (
     <ArticleWrapper>
       <header>

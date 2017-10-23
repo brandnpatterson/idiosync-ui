@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Redirect } from 'react-router'
 import { object } from 'prop-types'
 import axios from 'axios'
 import styled from 'styled-components'
@@ -13,7 +14,8 @@ class EditAuthor extends Component {
     this.state = {
       id: '',
       name: '',
-      bio: ''
+      bio: '',
+      fireRedirect: false
     }
   }
 
@@ -32,12 +34,13 @@ class EditAuthor extends Component {
     })
   }
 
-  editAuthor = () => {
+  editAuthor = (e) => {
+    e.preventDefault()
+
     const {
       id,
       name,
-      bio,
-      getRequest
+      bio
     } = this.state
 
     const authorObj = {
@@ -46,20 +49,22 @@ class EditAuthor extends Component {
     }
     axios.put(`${req}/${id}`, authorObj)
       .then(() => {
-        getRequest()
+        this.setState({
+          fireRedirect: true
+        })
+        console.log(this.state.fireRedirect);
       })
       .catch(err => console.log(err))
   }
 
-  deleteAuthor = () => {
-    const {
-      id,
-      getRequest
-    } = this.state
+  deleteAuthor = (e) => {
+    e.preventDefault()
 
-    axios.delete(`${req}/${id}`)
+    axios.delete(`${req}/${this.state.id}`)
       .then(() => {
-        getRequest()
+        this.setState({
+          fireRedirect: true
+        })
       })
       .catch(err => console.log(err))
   }
@@ -67,9 +72,10 @@ class EditAuthor extends Component {
   render () {
     const {
       name,
-      bio
+      bio,
+      fireRedirect
     } = this.state
-    const { author } = this.props
+    const { author, from } = this.props || '/'
 
     return (
       <EditAuthorWrapper>
@@ -90,8 +96,12 @@ class EditAuthor extends Component {
             </label>
           </div>
           <div className="formgroup">
-            <input className="button" name="create-author" type="submit" value="Submit" />
+            <input className="button" name="create-author" type="submit" value="Submit Changes" />
           </div>
+          {/* Redirect */}
+          {fireRedirect && (
+            <Redirect to={from || '/new-article'} />
+          )}
         </EditAuthorForm>
         {/* Delete Author */}
         <DeleteAuthorForm

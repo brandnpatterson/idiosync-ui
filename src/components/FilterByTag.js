@@ -4,9 +4,7 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 const FilterByTag = ({ authors, filterByTag, match }) => {
-
   const filteredArticles = []
-
   filterByTag.map(itemToFilter => {
     return itemToFilter.filter(f => {
       if (f !== null) {

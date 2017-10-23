@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Redirect } from 'react-router'
 import { array, bool, func } from 'prop-types'
 import axios from 'axios'
 import styled from 'styled-components'
@@ -13,7 +14,8 @@ class NewAuthor extends Component {
     this.state = {
       id: '',
       name: '',
-      bio: ''
+      bio: '',
+      fireRedirect: false
     }
   }
 
@@ -23,7 +25,8 @@ class NewAuthor extends Component {
     })
   }
 
-  postAuthor = () => {
+  postAuthor = (e) => {
+    e.preventDefault();
     const authorObj = {
       name: this.state.name,
       bio: this.state.bio
@@ -36,12 +39,14 @@ class NewAuthor extends Component {
       .catch(err => console.log(err))
     this.setState({
       name: '',
-      bio: ''
+      bio: '',
+      fireRedirect: true
     })
   }
 
   render () {
-    const { name, bio } = this.state
+    const { from } = this.props.location || '/'
+    const { name, bio, fireRedirect } = this.state
 
     return (
       <NewAuthorFormWrapper>
@@ -51,6 +56,9 @@ class NewAuthor extends Component {
           method="get"
           autoComplete="off"
         >
+          {fireRedirect && (
+            <div className="flash-success">New author created successfully!</div>
+          )}
           <div className="formgroup">
             <h2>New Author</h2>
           </div>
@@ -64,6 +72,9 @@ class NewAuthor extends Component {
           </div>
           <div className="formgroup">
             <input className="button" name="create-author" type="submit" value="Submit" />
+            {fireRedirect && (
+              <Redirect to={from || '/new-article'}/>
+            )}
           </div>
         </NewAuthorForm>
       </NewAuthorFormWrapper>

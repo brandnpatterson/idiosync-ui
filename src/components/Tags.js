@@ -4,7 +4,6 @@ import { array } from 'prop-types'
 import styled from 'styled-components'
 
 const Tags = ({ articles, tags }) => {
-
   return (
     <TagsDiv>
       <h2>Tags</h2>
