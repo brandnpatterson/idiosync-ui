@@ -4,6 +4,7 @@ import axios from 'axios'
 import styled from 'styled-components'
 
 import About from './About'
+import EditArticle from './EditArticle'
 import EditAuthor from './EditAuthor'
 import NewArticle from './NewArticle'
 import NewAuthor from './NewAuthor'
@@ -38,6 +39,9 @@ class App extends Component {
 
   componentWillMount () {
     this.getRequest()
+    setTimeout(() => {
+      this.setTags()
+    }, 200)
     let localAuth = localStorage.getItem('authenticated')
     if (localAuth === 'true') {
       this.setState({
@@ -58,18 +62,13 @@ class App extends Component {
         const authors = res.data
         this.setState({ authors })
       })
-      .then(() => {
-        setTimeout(() => {
-          this.setTags()
-        }, 0)
-      })
       .catch(err => console.log(err))
   }
 
   setTags = () => {
     const { articles, tags } = this.state
     // access each article.tags to be used in tags state
-    if (articles) {
+    setTimeout(() => {
       articles.forEach(article => {
         article.tags.forEach(tag => {
           // article.tag => tags
@@ -89,7 +88,7 @@ class App extends Component {
           })
         })
       })
-    }
+    }, 200)
   }
 
   login = (e) => {
@@ -162,6 +161,16 @@ class App extends Component {
     }
   }
 
+  setReactIds = () => {
+    const { articles, authors } = this.state
+    articles.forEach((article, index) => {
+      article.id_react = index + 1
+    })
+    authors.forEach((author, index) => {
+      author.id_react = index + 1
+    })
+  }
+
   render () {
     const {
       articles,
@@ -183,10 +192,8 @@ class App extends Component {
 
     filteredArticles.length = 3
 
-    if (articles) {
-      articles.forEach((article, index) => {
-        article.id_react = index + 1
-      })
+    if (articles && authors) {
+      this.setReactIds()
     }
 
     return (
@@ -217,8 +224,8 @@ class App extends Component {
             <Route path="/articles/:index" render={({ match }) => {
               return (
                 <Article
-                  articles={articles}
                   article={articles.find(a => a.id_react === parseInt(match.params.index, 10))}
+                  articles={articles}
                   authors={authors}
                 />
               )
@@ -238,7 +245,6 @@ class App extends Component {
                   authors={authors}
                   match={match}
                   tags={tags}
-                  getRequest={this.getRequest}
                   filterByTag={
                     articles.map(article => {
                       return article.tags.map(tag => {
@@ -264,25 +270,35 @@ class App extends Component {
               updatePassword={this.updatePassword}
             />
           }} />
+          { /* New Article */ }
           {articles && authors && tags && (
             <Route exact path="/new-article" render={() => {
               return <NewArticle
                 authenticated={authenticated}
                 authors={authors}
                 articles={articles}
-                getRequest={this.getRequest}
                 tags={tags}
                 deleted_author={deleted_author}
               />
             }} />
           )}
+          { /* Edit Article by :id */ }
+          {articles && (
+            <Route path="/articles/edit/:id" render={({ match }) => {
+              return (
+                <EditArticle
+                  article={articles.find(a => a.id_react === parseInt(match.params.id, 10))}
+                />
+              )
+            }} />
+          )}
+          { /* New Author */ }
           {authors && (
             <Route exact path="/new-author" render={() => {
               return <NewAuthor
                 authenticated={authenticated}
                 authors={authors}
                 articles={articles}
-                getRequest={this.getRequest}
               />
             }} />
           )}
@@ -291,7 +307,7 @@ class App extends Component {
             <Route path="/authors/edit/:id" render={({ match }) => {
               return (
                 <EditAuthor
-                  author={authors.find(a => a.id === parseInt(match.params.id, 10))}
+                  author={authors.find(a => a.id_react === parseInt(match.params.id, 10))}
                   deleteNotify={this.deleteNotify}
                   deleted_author={deleted_author}
                 />

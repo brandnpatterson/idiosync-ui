@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { array, bool, func } from 'prop-types'
+import { array, bool } from 'prop-types'
 import { Link } from 'react-router-dom'
 import MdEdit from 'react-icons/lib/md/edit'
 import axios from 'axios'
@@ -20,10 +20,6 @@ class NewArticle extends Component {
       tag_list: '',
       new_article: false
     }
-  }
-
-  componentWillMount () {
-    this.props.getRequest()
   }
 
   onChange = (e) => {
@@ -52,7 +48,6 @@ class NewArticle extends Component {
         })
       })
       .then(() => {
-        this.props.getRequest()
         window.scrollTo(0, 0)
       })
       .catch(err => console.log(err))
@@ -105,7 +100,7 @@ class NewArticle extends Component {
           >
             {a.name}
           </button>
-          <Link to={`authors/edit/${a.id}`}>
+          <Link to={`authors/edit/${a.id_react}`}>
             <MdEdit />
           </Link>
         </div>
@@ -201,8 +196,7 @@ class NewArticle extends Component {
 NewArticle.propType = {
   articles: array.isRequired,
   authenticated: bool.isRequired,
-  authors: array.isRequired,
-  getRequest: func.isRequred
+  authors: array.isRequired
 }
 
 const NewArticleWrapper = styled.div `

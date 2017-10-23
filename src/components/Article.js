@@ -1,6 +1,7 @@
 import React from 'react'
 import { array, object } from 'prop-types'
 import { Link } from 'react-router-dom'
+import MdEdit from 'react-icons/lib/md/edit'
 import styled from 'styled-components'
 
 const Article = ({ article, articles, authors }) => {
@@ -11,7 +12,10 @@ const Article = ({ article, articles, authors }) => {
     <ArticleWrapper>
       <header>
         <div>
-          <h2>{article.title}</h2>
+          <div className="title-wrapper">
+            <h2>{article.title}</h2>
+            <MdEdit />
+          </div>
           {
             authors.map((author, index) => {
               if (author.id === article.author_id) {
@@ -74,6 +78,13 @@ const ArticleWrapper = styled.div`
   header {
     display: flex;
     justify-content: space-between;
+    .title-wrapper {
+      display: flex;
+      align-items: center;
+      svg {
+        margin: 0 0 0 0.5em;
+      }
+    }
   }
   button {
     margin: 1.5em 0 0 0.5em;

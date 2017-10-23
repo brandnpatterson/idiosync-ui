@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router'
-import { array, bool, func } from 'prop-types'
+import { array, bool } from 'prop-types'
 import axios from 'axios'
 import styled from 'styled-components'
 
@@ -33,9 +33,6 @@ class NewAuthor extends Component {
     }
 
     axios.post(req, authorObj)
-      .then(() => {
-        this.props.getRequest()
-      })
       .catch(err => console.log(err))
     this.setState({
       name: '',
@@ -84,8 +81,7 @@ class NewAuthor extends Component {
 
 NewAuthor.propType = {
   authenticated: bool.isRequired,
-  authors: array.isRequired,
-  getRequest: func.isRequred
+  authors: array.isRequired
 }
 
 const NewAuthorFormWrapper = styled.div `
