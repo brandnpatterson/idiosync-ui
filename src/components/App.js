@@ -28,6 +28,7 @@ class App extends Component {
       articles: null,
       authenticated: true,
       authors: null,
+      deleted_author: false,
       email: '',
       password: '',
       search: '',
@@ -149,11 +150,24 @@ class App extends Component {
     })
   }
 
+  deleteNotify = () => {
+    if (this.state.deleted_author === false) {
+      this.setState({
+        deleted_author: true
+      })
+    } else {
+      this.setState({
+        deleted_author: false
+      })
+    }
+  }
+
   render () {
     const {
       articles,
       authenticated,
       authors,
+      deleted_author,
       search,
       tags
     } = this.state
@@ -168,6 +182,12 @@ class App extends Component {
     }
 
     filteredArticles.length = 3
+
+    if (articles) {
+      articles.forEach((article, index) => {
+        article.id_react = index + 1
+      })
+    }
 
     return (
       <AppWrapper>
@@ -198,7 +218,7 @@ class App extends Component {
               return (
                 <Article
                   articles={articles}
-                  article={articles.find(a => a.id === parseInt(match.params.index, 10))}
+                  article={articles.find(a => a.id_react === parseInt(match.params.index, 10))}
                   authors={authors}
                 />
               )
@@ -218,6 +238,7 @@ class App extends Component {
                   authors={authors}
                   match={match}
                   tags={tags}
+                  getRequest={this.getRequest}
                   filterByTag={
                     articles.map(article => {
                       return article.tags.map(tag => {
@@ -251,6 +272,7 @@ class App extends Component {
                 articles={articles}
                 getRequest={this.getRequest}
                 tags={tags}
+                deleted_author={deleted_author}
               />
             }} />
           )}
@@ -268,7 +290,11 @@ class App extends Component {
           {authors && (
             <Route path="/authors/edit/:id" render={({ match }) => {
               return (
-                <EditAuthor author={authors.find(a => a.id === parseInt(match.params.id, 10))} />
+                <EditAuthor
+                  author={authors.find(a => a.id === parseInt(match.params.id, 10))}
+                  deleteNotify={this.deleteNotify}
+                  deleted_author={deleted_author}
+                />
               )
             }} />
           )}

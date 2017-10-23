@@ -43,17 +43,19 @@ class NewArticle extends Component {
     }
     axios.post(req, articleObj)
       .then(() => {
+        this.setState({
+          title: '',
+          content: '',
+          author_id: '',
+          tag_list: '',
+          new_article: true
+        })
+      })
+      .then(() => {
         this.props.getRequest()
+        window.scrollTo(0, 0)
       })
       .catch(err => console.log(err))
-    this.setState({
-      title: '',
-      content: '',
-      author_id: '',
-      tag_list: '',
-      new_article: true
-    })
-    window.scrollTo(0, 0)
   }
 
   setActiveAuthor = (id) => {
@@ -79,7 +81,7 @@ class NewArticle extends Component {
       tag_list,
       new_article
     } = this.state
-    const { authors, tags } = this.props
+    const { authors, tags, deleted_author } = this.props
 
     const authorButtons = authors
       .sort((a, b) => {
@@ -143,7 +145,10 @@ class NewArticle extends Component {
             autoComplete="off"
           >
             {new_article && (
-              <div>New article created successfully!</div>
+              <div>Article created successfully!</div>
+            )}
+            {deleted_author && (
+              <div>Author deleted successfully!</div>
             )}
             <div className="formgroup">
               <h2>New Article</h2>
@@ -235,11 +240,12 @@ const NewArticleWrapper = styled.div `
   .tag-buttons-wrapper {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: flex-start;
     align-items: center;
-    margin: 2em auto;
+    margin: 0 auto;
     .tag-button {
-      margin: 0 1.5em 0 0;
+      margin: 1em 1.5em 0 0;
     }
   }
 `

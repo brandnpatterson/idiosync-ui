@@ -20,7 +20,7 @@ const Home = ({ articles, authors }) => {
                   })}
                 </li>
                 <li className="title">
-                  <Link to={`/articles/${article.id}`}>{article.title}</Link>
+                  <Link to={`/articles/${article.id_react}`}>{article.title}</Link>
                 </li>
               </ul>
             ))

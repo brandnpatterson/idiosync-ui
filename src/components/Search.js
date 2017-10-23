@@ -18,7 +18,7 @@ const Search = ({  filteredArticles, search, updateSearch }) => {
           <Link
             className={"search__result--item" + (search === '' ? " hidden" : '')}
             key={index}
-            to={`/articles/${article.id}`}
+            to={`/articles/${article.id_react}`}
           >
             <li>{article.title}</li>
           </Link>

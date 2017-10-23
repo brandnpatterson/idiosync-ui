@@ -3,7 +3,7 @@ import { array, object } from 'prop-types'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
-const FilterByTag = ({ authors, filterByTag, match }) => {
+const FilterByTag = ({ authors, filterByTag, getRequest, match }) => {
   const filteredArticles = []
   filterByTag.map(itemToFilter => {
     return itemToFilter.filter(f => {
@@ -14,6 +14,8 @@ const FilterByTag = ({ authors, filterByTag, match }) => {
       }
     })
   })
+
+  getRequest()
 
   return (
     <FilterByTagWrapper>
@@ -31,7 +33,7 @@ const FilterByTag = ({ authors, filterByTag, match }) => {
                   })}
                 </li>
                 <li className="title">
-                  <Link to={`/articles/${article.id}`}>{article.title}</Link>
+                  <Link to={`/articles/${article.id_react}`}>{article.title}</Link>
                 </li>
               </ul>
             ))

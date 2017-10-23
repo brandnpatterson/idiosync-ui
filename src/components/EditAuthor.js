@@ -59,6 +59,7 @@ class EditAuthor extends Component {
   deleteAuthor = (e) => {
     e.preventDefault()
 
+    this.props.deleteNotify()
     axios.delete(`${req}/${this.state.id}`)
       .then(() => {
         this.setState({
@@ -66,6 +67,9 @@ class EditAuthor extends Component {
         })
       })
       .catch(err => console.log(err))
+    setTimeout(() => {
+      this.props.deleteNotify()
+    }, 2000)
   }
 
   render () {

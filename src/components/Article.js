@@ -6,6 +6,7 @@ import styled from 'styled-components'
 const Article = ({ article, articles, authors }) => {
   const total = articles.length
   const tags = article.tags
+
   return (
     <ArticleWrapper>
       <header>
@@ -23,16 +24,16 @@ const Article = ({ article, articles, authors }) => {
         </div>
         <div>
           <Link to={
-            article.id === 1
+            article.id_react === 1
             ? `/articles/${total}`
-            : `/articles/${article.id - 1}`}
+            : `/articles/${article.id_react - 1}`}
           >
             <button>Prev</button>
           </Link>
           <Link to={
-            article.id === total
+            article.id_react === total
             ? `/articles/1`
-            : `/articles/${article.id + 1}`}
+            : `/articles/${article.id_react + 1}`}
           >
             <button>Next</button>
           </Link>
