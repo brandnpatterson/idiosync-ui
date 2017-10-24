@@ -102,7 +102,7 @@ class EditArticle extends Component {
               <input name="title" value={title} onChange={this.onChange} type="text" autoFocus />
             </label>
             <label htmlFor="content"> Content:
-              <textarea name="content" value={content} onChange={this.onChange} />
+              <textarea name="content" value={content} onChange={this.onChange} rows="20" />
             </label>
           </div>
           <div className="formgroup">
