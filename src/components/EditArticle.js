@@ -5,7 +5,7 @@ import axios from 'axios'
 import styled from 'styled-components'
 
 import EditArticleForm from './themes/Form'
-import DeleteArticleForm from './themes/Form'
+import DeleteForm from './themes/Form'
 
 const req = 'http://localhost:3000/api/v1/articles'
 
@@ -16,7 +16,8 @@ class EditArticle extends Component {
       id: '',
       title: '',
       content: '',
-      fireRedirect: false
+      fireRedirect: false,
+      delete_selected: false
     }
   }
   //
@@ -79,49 +80,77 @@ class EditArticle extends Component {
     }, 2000)
   }
 
+  handleSelectDelete = () => {
+    if (this.state.delete_selected === false) {
+      this.setState({
+        delete_selected: true
+      })
+    } else {
+      this.setState({
+        delete_selected: false
+      })
+    }
+  }
+
   render () {
     const {
       title,
       content,
+      delete_selected,
       fireRedirect
     } = this.state
     const { article, from } = this.props || '/'
 
     return (
       <EditArticleWrapper>
-        <EditArticleForm
-          onSubmit={this.editArticle}
-          method="get"
-          autoComplete="off"
-        >
-          <div className="formgroup">
-            <h2>Edit {article.title}</h2>
+        {
+          !delete_selected && (
+          <div>
+            <EditArticleForm
+              onSubmit={this.editArticle}
+              method="get"
+              autoComplete="off"
+            >
+              <div className="formgroup">
+                <h2>Edit {article.title}</h2>
+              </div>
+              <div className="formgroup">
+                <label htmlFor="create-article"> Title:
+                  <input name="title" value={title} onChange={this.onChange} type="text" autoFocus required />
+                </label>
+                <label htmlFor="content"> Content:
+                  <textarea name="content" value={content} onChange={this.onChange} rows="20" required />
+                </label>
+              </div>
+              <div className="formgroup">
+                <input className="button" name="create-article" type="submit" value="Submit Changes" />
+              </div>
+              <div className="delete-selected" onClick={this.handleSelectDelete}>
+                <div className="formgroup">
+                  <input className="button button-delete" name="delete-article" type="button" value="Delete" />
+                </div>
+              </div>
+              {/* Redirect */}
+              {fireRedirect && (
+                <Redirect to={from || '/articles'} />
+              )}
+            </EditArticleForm>
           </div>
-          <div className="formgroup">
-            <label htmlFor="create-article"> Title:
-              <input name="title" value={title} onChange={this.onChange} type="text" autoFocus />
-            </label>
-            <label htmlFor="content"> Content:
-              <textarea name="content" value={content} onChange={this.onChange} rows="20" />
-            </label>
-          </div>
-          <div className="formgroup">
-            <input className="button" name="create-article" type="submit" value="Submit Changes" />
-          </div>
-          {/* Redirect */}
-          {fireRedirect && (
-            <Redirect to={from || '/articles'} />
-          )}
-        </EditArticleForm>
-        {/* Delete Article */}
-        <DeleteArticleForm
-          onSubmit={this.deleteArticle}
-          method="delete"
-        >
-          <div className="formgroup">
-            <input className="button button-delete" name="delete-article" type="submit" value="Delete" />
-          </div>
-        </DeleteArticleForm>
+          )
+        }
+        {
+          delete_selected && (
+            <DeleteForm
+              onSubmit={this.deleteArticle}
+              method="delete"
+            >
+              <div className="formgroup">
+                <h3>Are you sure you would like to delete {title}?</h3>
+                <input className="button button-delete" name="delete-article" type="submit" value="Delete" />
+              </div>
+            </DeleteForm>
+          )
+        }
       </EditArticleWrapper>
     )
   }

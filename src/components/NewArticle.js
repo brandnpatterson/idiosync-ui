@@ -170,12 +170,12 @@ class NewArticle extends Component {
             </div>
             <div className="formgroup">
               <label htmlFor="title"> Title:
-                <input name="title" value={title} onChange={this.onChange} type="text" autoFocus />
+                <input name="title" value={title} onChange={this.onChange} type="text" autoFocus required />
               </label>
             </div>
             <div className="formgroup">
               <label htmlFor="content"> Content:
-                <textarea name="content" value={content} onChange={this.onChange} />
+                <textarea name="content" value={content} onChange={this.onChange} required />
               </label>
             </div>
             <div className="formgroup">
@@ -190,7 +190,7 @@ class NewArticle extends Component {
             </div>
             <div className="tag_list formgroup">
               <label htmlFor="tag_list"> Tags: (Seperate with commas)
-                <input name="tag_list" value={tag_list} onChange={this.onChange} type="text" />
+                <input name="tag_list" value={tag_list} onChange={this.onChange} type="text" required />
               </label>
             </div>
             <div className="formgroup">

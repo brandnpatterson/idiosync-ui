@@ -312,7 +312,6 @@ class App extends Component {
               return (
                 <EditAuthor
                   author={authors.find(a => a.id_react === parseInt(match.params.id, 10))}
-                  deleteAuthorNotify={this.deleteAuthorNotify}
                   deleteFlashConfirmation={this.deleteFlashConfirmation}
                   updateFlashConfirmation={this.updateFlashConfirmation}
                   getRequest={this.getRequest}

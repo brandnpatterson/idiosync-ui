@@ -68,10 +68,10 @@ class NewAuthor extends Component {
           </div>
           <div className="formgroup">
             <label htmlFor="create-author"> Name:
-              <input name="name" value={name} onChange={this.onChange} type="text" autoFocus />
+              <input name="name" value={name} onChange={this.onChange} type="text" autoFocus required />
             </label>
             <label htmlFor="bio"> Bio:
-              <textarea name="bio" value={bio} onChange={this.onChange} />
+              <textarea name="bio" value={bio} onChange={this.onChange} required />
             </label>
           </div>
           <div className="formgroup">

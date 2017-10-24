@@ -130,7 +130,6 @@ class EditAuthor extends Component {
 
 EditAuthor.propTypes = {
   author: object.isRequired,
-  deleteAuthorNotify: func.isRequired,
   deleteFlashConfirmation: func.isRequired,
   updateFlashConfirmation: func.isRequired,
   getRequest: func.isRequired
