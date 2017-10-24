@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { array } from 'prop-types'
+import { array, bool } from 'prop-types'
 import styled from 'styled-components'
 
 const Home = ({ articles, authors, flash_delete, flash_update }) => {
@@ -42,7 +42,10 @@ const Home = ({ articles, authors, flash_delete, flash_update }) => {
 }
 
 Home.propTypes = {
-  articles: array.isRequired
+  articles: array.isRequired,
+  authors: array.isRequired,
+  flash_delete: bool.isRequired,
+  flash_update: bool.isRequired
 }
 
 const HomeWrapper = styled.div `

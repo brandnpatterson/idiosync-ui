@@ -10,7 +10,8 @@ const Login = ({ email, login, password, updateEmail, updatePassword }) => {
       </div>
       <div className="formgroup">
         <label htmlFor="email"> Email:
-          <input type="text" data-error="true" id="email" name="email"
+          <input
+            type="text" data-error="true" name="email"
             onChange={updateEmail}
             value={email}
             autoFocus
@@ -19,7 +20,8 @@ const Login = ({ email, login, password, updateEmail, updatePassword }) => {
       </div>
       <div className="formgroup">
         <label htmlFor="password"> Password:
-          <input type="password" data-error="true" id="password" name="password"
+          <input
+            type="password" data-error="true" name="password"
             onChange={updatePassword}
             value={password}
           />

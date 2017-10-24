@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router'
-import { array, bool } from 'prop-types'
+import { array, bool, func } from 'prop-types'
 import axios from 'axios'
 import styled from 'styled-components'
 
@@ -87,8 +87,11 @@ class NewAuthor extends Component {
 }
 
 NewAuthor.propType = {
+  articles: array.isRequired,
   authenticated: bool.isRequired,
-  authors: array.isRequired
+  authors: array.isRequired,
+  createFlashConfirmation: func.isRequired,
+  getRequest: func.isRequired
 }
 
 const NewAuthorFormWrapper = styled.div `

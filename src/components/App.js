@@ -256,9 +256,9 @@ class App extends Component {
           {articles && authors && tags && (
             <Route exact path="/new-article" render={() => {
               return <NewArticle
+                articles={articles}
                 authenticated={authenticated}
                 authors={authors}
-                articles={articles}
                 tags={tags}
                 flash_create={flash_create}
                 flash_delete={flash_delete}
@@ -296,9 +296,9 @@ class App extends Component {
           {authors && (
             <Route exact path="/new-author" render={() => {
               return <NewAuthor
+                articles={articles}
                 authenticated={authenticated}
                 authors={authors}
-                articles={articles}
                 createFlashConfirmation={this.createFlashConfirmation}
                 getRequest={this.getRequest}
               />

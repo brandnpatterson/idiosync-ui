@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { array, bool } from 'prop-types'
+import { array, bool, func } from 'prop-types'
 import { Link } from 'react-router-dom'
 import MdEdit from 'react-icons/lib/md/edit'
 import axios from 'axios'
@@ -216,7 +216,12 @@ class NewArticle extends Component {
 NewArticle.propType = {
   articles: array.isRequired,
   authenticated: bool.isRequired,
-  authors: array.isRequired
+  authors: array.isRequired,
+  tags: array.isRequired,
+  flash_create: bool.isRequired,
+  flash_delete: bool.isRequired,
+  flash_update: bool.isRequired,
+  getRequest: func.isRequired
 }
 
 const NewArticleWrapper = styled.div `

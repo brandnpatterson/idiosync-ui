@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router'
-import { object } from 'prop-types'
+import { func, object } from 'prop-types'
 import axios from 'axios'
 import styled from 'styled-components'
+
 import EditAuthorForm from './themes/Form'
 import DeleteAuthorForm from './themes/Form'
 
@@ -128,7 +129,11 @@ class EditAuthor extends Component {
 }
 
 EditAuthor.propTypes = {
-  author: object.isRequired
+  author: object.isRequired,
+  deleteAuthorNotify: func.isRequired,
+  deleteFlashConfirmation: func.isRequired,
+  updateFlashConfirmation: func.isRequired,
+  getRequest: func.isRequired
 }
 
 const EditAuthorWrapper = styled.div`

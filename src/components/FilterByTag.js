@@ -43,6 +43,7 @@ const FilterByTag = ({ authors, filterByTag, match }) => {
 }
 
 FilterByTag.propTypes = {
+  authors: array.isRequired,
   filterByTag: array.isRequired,
   match: object.isRequired
 }
