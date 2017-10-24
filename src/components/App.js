@@ -93,6 +93,17 @@ class App extends Component {
     }, 200)
   }
 
+  setReactIds = () => {
+    const { articles, authors } = this.state
+    articles.forEach((article, index) => {
+      article.id_react = index + 1
+    })
+    authors.forEach((author, index) => {
+      author.id_react = index + 1
+    })
+  }
+
+  // authentication
   login = (e) => {
     e.preventDefault()
     const { email, password } = this.state
@@ -151,6 +162,7 @@ class App extends Component {
     })
   }
 
+  // flash
   createFlashConfirmation = () => {
     if (this.state.flash_create === false) {
       this.setState({
@@ -185,16 +197,6 @@ class App extends Component {
         flash_update: false
       })
     }
-  }
-
-  setReactIds = () => {
-    const { articles, authors } = this.state
-    articles.forEach((article, index) => {
-      article.id_react = index + 1
-    })
-    authors.forEach((author, index) => {
-      author.id_react = index + 1
-    })
   }
 
   render () {
